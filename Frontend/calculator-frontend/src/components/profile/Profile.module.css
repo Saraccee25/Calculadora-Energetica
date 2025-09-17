@@ -1,6 +1,5 @@
-/* Overlay principal */
 .modalOverlay {
-  position: fixed; /* Se asegura que cubre toda la pantalla */
+  position: fixed; 
   top: 0;
   left: 0;
   right: 0;
@@ -10,8 +9,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2100; /* más alto que el header, menus y dropdowns */
+  z-index: 2100; 
   animation: fadeIn 0.3s ease-out;
+  font-family: inherit;
 }
 
 @keyframes fadeIn {
@@ -31,6 +31,7 @@
   overflow-y: auto;
   z-index: 2200;
   animation: slideIn 0.3s ease-out;
+  font-family: inherit;
 }
 
 @keyframes slideIn {
@@ -52,6 +53,7 @@
   padding: 24px 24px 0;
   border-bottom: 1px solid #f1f5f9;
   margin-bottom: 24px;
+  font-family: inherit;
 }
 
 .modalTitle {
@@ -59,6 +61,7 @@
   font-weight: 700;
   color: #15803d;
   margin: 0;
+  font-family: inherit;
 }
 
 .closeButton {
@@ -75,6 +78,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  font-family: inherit;
 }
 
 .closeButton:hover {
@@ -87,6 +91,7 @@
   display: flex;
   margin: 0 24px 24px;
   border-bottom: 1px solid #e2e8f0;
+  font-family: inherit;
 }
 
 .tab {
@@ -100,9 +105,11 @@
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
   flex: 1;
+  font-family: inherit;
 }
 
 .tab:hover { color: #15803d; }
+
 .activeTab {
   color: #15803d !important;
   border-bottom-color: #15803d;
@@ -111,16 +118,29 @@
 /* Formulario */
 .form {
   padding: 0 24px 24px;
+  font-family: inherit;
 }
 
 .tabContent {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  font-family: inherit;
 }
 
-.inputGroup { display: flex; flex-direction: column; gap: 6px; }
-.label { font-size: 14px; font-weight: 600; color: #374151; }
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  font-family: inherit;
+}
 
 .input {
   padding: 12px 16px;
@@ -129,6 +149,7 @@
   font-size: 14px;
   transition: all 0.2s ease;
   background: #ffffff;
+  font-family: inherit;
 }
 
 .input:focus {
@@ -147,6 +168,7 @@
   font-size: 12px;
   color: #ef4444;
   margin-top: 4px;
+  font-family: inherit;
 }
 
 .generalError {
@@ -157,6 +179,7 @@
   border-radius: 8px;
   font-size: 14px;
   margin-bottom: 16px;
+  font-family: inherit;
 }
 
 /* Acciones */
@@ -166,6 +189,7 @@
   margin-top: 32px;
   padding-top: 24px;
   border-top: 1px solid #f1f5f9;
+  font-family: inherit;
 }
 
 .cancelButton, .saveButton {
@@ -176,6 +200,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .cancelButton {
@@ -201,16 +226,14 @@
 
 /* Modal de confirmación */
 .confirmationOverlay {
-  position: fixed; /* importante: fixed para cubrir todo */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 2300; /* más alto que el modal normal */
+  z-index: 2300;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: inherit;
 }
 
 .confirmationModal {
@@ -222,6 +245,7 @@
   max-width: 400px;
   width: 100%;
   z-index: 2400;
+  font-family: inherit;
 }
 
 .confirmationTitle {
@@ -229,6 +253,7 @@
   font-weight: 700;
   color: #dc2626;
   margin: 0 0 12px 0;
+  font-family: inherit;
 }
 
 .confirmationText {
@@ -236,9 +261,14 @@
   color: #374151;
   line-height: 1.5;
   margin: 0 0 24px 0;
+  font-family: inherit;
 }
 
-.confirmationActions { display: flex; gap: 12px; }
+.confirmationActions { 
+  display: flex; 
+  gap: 12px; 
+  font-family: inherit;
+}
 
 .confirmationCancel, .confirmationConfirm {
   flex: 1;
@@ -248,6 +278,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .confirmationCancel {
