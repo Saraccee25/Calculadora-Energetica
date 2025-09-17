@@ -137,6 +137,25 @@
   text-decoration: underline;
 }
 
+.forgotPassword {
+  margin-top: 6px;
+  text-align: right;
+}
+
+.forgotPassword a {
+  font-size: 14px;
+  color: #15803d;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgotPassword a:hover {
+  color: #166534;
+  text-decoration: underline;
+}
+
+
 @media (max-width: 480px) {
   .loginCard {
     padding: 24px;

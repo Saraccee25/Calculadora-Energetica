@@ -33,7 +33,6 @@ const Login = () => {
       [name]: value,
     }))
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -46,14 +45,12 @@ const Login = () => {
     e.preventDefault()
     const newErrors = {}
 
-    // Validate email
     if (!formData.email) {
       newErrors.email = "El correo electrónico es requerido"
     } else if (!validateEmail(formData.email)) {
       newErrors.email = "Por favor ingresa un correo electrónico válido"
     }
 
-    // Validate password
     if (!formData.password) {
       newErrors.password = "La contraseña es requerida"
     } else if (!validatePassword(formData.password)) {
@@ -65,11 +62,9 @@ const Login = () => {
 
     if (Object.keys(newErrors).length === 0) {
       setIsLoading(true)
-      // Simulate login process
       setTimeout(() => {
         console.log("Login successful:", formData)
         setIsLoading(false)
-        // Here you would typically handle the login logic
       }, 1500)
     }
   }
@@ -113,6 +108,11 @@ const Login = () => {
               placeholder="••••••••"
             />
             {errors.password && <span className={styles.error}>{errors.password}</span>}
+
+            <div className={styles.forgotPassword}>
+              <a href="/forgot-password" className={styles.link}>
+              </a>
+            </div>
           </div>
 
           <button
