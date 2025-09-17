@@ -1,0 +1,215 @@
+.calculations {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h2 {
+  color: var(--color-text-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+
+.householdSummary {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.householdSummary h3 {
+  color: var(--color-text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.summaryCard {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  border-radius: var(--border-radius-md);
+  padding: 1.5rem;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+.summaryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.summaryIcon {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summaryContent h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.summaryValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.deviceTotals {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.deviceTotals h3 {
+  color: var(--color-text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.devicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.deviceCard {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: 1.5rem;
+  transition: all var(--transition-duration) var(--transition-timing);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); /* 👈 sombra por defecto */
+  position: relative;
+  overflow: hidden;
+}
+
+.deviceCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
+}
+
+.deviceCard:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* 👈 más sombra al hover */
+  transform: translateY(-3px);
+}
+
+.deviceHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.deviceIcon {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(-color-text-primary);
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.deviceMetrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border-top: 1px solid var(--color-border); /* 👈 separador */
+  padding-top: 1rem;
+}
+
+.metric {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-sm);
+  padding: 0.75rem;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.metric:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.metricLabel {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.metricValue {
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .calculations {
+    padding: 1rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .devicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .deviceMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .householdSummary,
+  .deviceTotals {
+    padding: 1.5rem;
+  }
+}
