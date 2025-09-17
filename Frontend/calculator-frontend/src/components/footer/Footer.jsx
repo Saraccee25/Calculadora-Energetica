@@ -82,7 +82,7 @@ const Footer = () => {
         </div>
 
         <div className={styles.footerBottom}>
-          <p className={styles.copyright}>&copy; 2024 CalcuLuz. Todos los derechos reservados.</p>
+          <p className={styles.copyright}>&copy; 2025 CalcuLuz. Todos los derechos reservados.</p>
           <div className={styles.socialLinks}>
             <a href="#" className={styles.socialLink} aria-label="Twitter">
               📱

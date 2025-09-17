@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -20,10 +21,14 @@ const Header = () => {
           <a href="#contacto" className={styles.navLink}>Contacto</a>
         </nav>
         <div className={styles.authButtons}>
-          <button className={styles.loginBtn}>Iniciar Sesión</button>
-          <button className={styles.signupBtn}>
-            <span>Registrarse</span>
-          </button>
+          <Link to="/login">
+            <button className={styles.loginBtn}>Iniciar Sesión</button>
+          </Link>
+           <Link to="/signup">
+            <button className={styles.signupBtn}>
+              <span>Registrarse</span>
+            </button>
+          </Link>
         </div>
         <div
           className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
