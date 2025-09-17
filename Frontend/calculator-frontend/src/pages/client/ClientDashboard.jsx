@@ -2,9 +2,12 @@
 
 import { useState } from "react"
 import { FaHome, FaPlug, FaChartPie, FaCalculator, FaLightbulb, FaBolt, FaLeaf, FaDollarSign } from "react-icons/fa"
-import { MdAttachMoney } from "react-icons/md"
 import styles from "./ClientDashboard.module.css"
 import Devices from "../../components/devices/Devices"
+import Calculations from "../../components/calculations/Calculations"
+import DataVisualization from "../../components/visualization/DataVisualization"
+import ScenarioSimulator from "../../components/simulator/ScenarioSimulator"
+import Recommendations from "../../components/recommendations/Recommendations"
 
 const ClientDashboard = () => {
   const [activeSection, setActiveSection] = useState("home")
@@ -12,7 +15,7 @@ const ClientDashboard = () => {
   const menuItems = [
     { id: "home", label: "Inicio", icon: FaHome },
     { id: "devices", label: "Dispositivos", icon: FaPlug },
-    { id: "tariffs", label: "Tarifas", icon: MdAttachMoney },
+    { id: "calculations", label: "Cálculos", icon: FaCalculator },
     { id: "visualization", label: "Visualización", icon: FaChartPie },
     { id: "simulator", label: "Simulador", icon: FaCalculator },
     { id: "recommendations", label: "Recomendaciones", icon: FaLightbulb },
@@ -71,66 +74,14 @@ const ClientDashboard = () => {
         )
       case "devices":
         return <Devices />
-      case "tariffs":
-        return (
-          <div className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <h2>Gestión de Tarifas</h2>
-              <p>Selecciona tu estrato y visualiza tu tarifa aplicada</p>
-            </div>
-            <div className={styles.sectionContent}>
-              <div className={styles.placeholder}>
-                <MdAttachMoney className={styles.placeholderIcon} />
-                <p>Configura y visualiza tus tarifas eléctricas</p>
-              </div>
-            </div>
-          </div>
-        )
+      case "calculations":
+        return <Calculations />
       case "visualization":
-        return (
-          <div className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <h2>Visualización de Datos</h2>
-              <p>Gráficas de barras, tortas y tablas resumen</p>
-            </div>
-            <div className={styles.sectionContent}>
-              <div className={styles.placeholder}>
-                <FaChartPie className={styles.placeholderIcon} />
-                <p>Visualiza tus datos de consumo con gráficas interactivas</p>
-              </div>
-            </div>
-          </div>
-        )
+        return <DataVisualization />
       case "simulator":
-        return (
-          <div className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <h2>Simulador de Escenarios</h2>
-              <p>Compara tu escenario actual con uno optimizado</p>
-            </div>
-            <div className={styles.sectionContent}>
-              <div className={styles.placeholder}>
-                <FaCalculator className={styles.placeholderIcon} />
-                <p>Simula diferentes escenarios de consumo energético</p>
-              </div>
-            </div>
-          </div>
-        )
+        return <ScenarioSimulator />
       case "recommendations":
-        return (
-          <div className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <h2>Recomendaciones</h2>
-              <p>Sugerencias de ahorro priorizadas por impacto</p>
-            </div>
-            <div className={styles.sectionContent}>
-              <div className={styles.placeholder}>
-                <FaLightbulb className={styles.placeholderIcon} />
-                <p>Descubre recomendaciones personalizadas para ahorrar energía</p>
-              </div>
-            </div>
-          </div>
-        )
+        return <Recommendations />
     }
   }
 
