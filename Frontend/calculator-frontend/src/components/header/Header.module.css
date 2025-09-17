@@ -10,13 +10,19 @@
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%; 
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; 
 }
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 2rem; 
+}
+
 
 .logo {
   display: flex;
@@ -60,7 +66,7 @@
 
 .nav {
   display: flex;
-  gap: 2.5rem;
+  gap: 1.5rem;
 }
 
 .navLink {

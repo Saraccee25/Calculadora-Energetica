@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2100; /* más alto que el header, menus y dropdowns */
+  z-index: 2100; 
   animation: fadeIn 0.3s ease-out;
   font-family: inherit;
 }
