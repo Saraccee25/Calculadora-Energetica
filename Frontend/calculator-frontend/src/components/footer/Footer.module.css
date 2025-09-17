@@ -1,0 +1,232 @@
+.footer {
+  background: var(--foreground);
+  color: var(--background);
+  padding: 4rem 0 1.5rem;
+  margin-top: auto;
+  border-top: 3px solid var(--primary);
+  position: relative;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footerContent {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.logoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoIcon {
+  font-size: 1.75rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--background);
+  animation: energyGlow 3s ease-in-out infinite alternate;
+  box-shadow: 0 0 20px rgba(21, 128, 61, 0.3);
+}
+
+@keyframes energyGlow {
+  from {
+    box-shadow: 0 0 20px rgba(21, 128, 61, 0.3);
+    transform: scale(1);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(21, 128, 61, 0.5), 0 0 40px rgba(132, 204, 22, 0.3);
+    transform: scale(1.05);
+  }
+}
+
+.logoText {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.025em;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.linksSection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+.linkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.linkTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--primary);
+  letter-spacing: -0.025em;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.95rem;
+  position: relative;
+  padding-left: 0;
+}
+
+.link::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--secondary);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link:hover::before {
+  width: 10px;
+}
+
+.link:hover {
+  color: var(--secondary);
+  transform: translateX(5px);
+}
+
+.footerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--background);
+  box-shadow: 0 2px 8px rgba(21, 128, 61, 0.3);
+}
+
+.socialLink:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 4px 15px rgba(21, 128, 61, 0.4);
+}
+
+@media (max-width: 768px) {
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .linksSection {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .logoIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+  }
+
+  .logoText {
+    font-size: 1.5rem;
+  }
+
+  .socialLinks {
+    gap: 0.75rem;
+  }
+
+  .socialLink {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
+  }
+}
