@@ -35,8 +35,6 @@
   z-index: 2;
 }
 
-
-
 .navigation {
   flex: 1;
   padding: 1.5rem 0;
@@ -143,8 +141,6 @@
   color: var(--muted-foreground);
   font-size: 1rem;
 }
-
-
 
 .contentArea {
   flex: 1;
@@ -336,308 +332,6 @@
   line-height: 1.6;
 }
 
-/* Devices Section Styles */
-.devicesSection {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.addDeviceForm {
-  background: var(--background);
-  padding: 2rem;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-
-.addDeviceForm h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.formGroup label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--muted-foreground);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.select,
-.input {
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  background: var(--background);
-  color: var(--foreground);
-  font-size: 0.875rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.select:focus,
-.input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.1);
-}
-
-.select:hover,
-.input:hover {
-  border-color: var(--primary);
-}
-
-.addButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--primary-foreground);
-  border: none;
-  padding: 0.875rem 2rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.addButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.addButton:not(:disabled):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(21, 128, 61, 0.3);
-}
-
-.devicesList h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.emptyState {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--muted-foreground);
-  background: var(--background);
-  border-radius: 16px;
-  border: 2px dashed var(--border);
-}
-
-.emptyIcon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: var(--primary);
-  opacity: 0.3;
-}
-
-.emptyState p {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.emptyState span {
-  font-size: 0.875rem;
-  opacity: 0.7;
-}
-
-.devicesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
-}
-
-.deviceCard {
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.deviceCard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  transform: scaleX(0);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.deviceCard:hover::before {
-  transform: scaleX(1);
-}
-
-.deviceCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(21, 128, 61, 0.1);
-  border-color: var(--primary);
-}
-
-.deviceHeader {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.deviceIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-foreground);
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
-.deviceInfo {
-  flex: 1;
-}
-
-.deviceInfo h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-bottom: 0.25rem;
-  line-height: 1.4;
-}
-
-.deviceInfo p {
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-  margin-bottom: 0.5rem;
-}
-
-.category {
-  font-size: 0.75rem;
-  background: var(--muted);
-  color: var(--muted-foreground);
-  padding: 0.25rem 0.75rem;
-  border-radius: 50px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.removeButton {
-  background: transparent;
-  border: 2px solid var(--destructive);
-  color: var(--destructive);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
-}
-
-.removeButton:hover {
-  background: var(--destructive);
-  color: var(--destructive-foreground);
-  transform: scale(1.05);
-}
-
-.deviceStats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: var(--muted);
-  border-radius: 12px;
-}
-
-.stat {
-  text-align: center;
-}
-
-.statLabel {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--muted-foreground);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.25rem;
-}
-
-.statValue {
-  display: block;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--foreground);
-}
-
-.deviceConsumption {
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.consumptionInfo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.consumptionLabel {
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-  font-weight: 500;
-}
-
-.consumptionValue {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.powerInfo {
-  font-size: 0.75rem;
-  color: var(--muted-foreground);
-  text-align: right;
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
   .sidebar {
@@ -650,15 +344,6 @@
 
   .dashboardHeader {
     padding: 1.5rem 2rem;
-  }
-
-  .formGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .devicesGrid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
@@ -711,34 +396,6 @@
   .statsGrid {
     grid-template-columns: 1fr;
   }
-
-  .formGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .devicesGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .addDeviceForm {
-    padding: 1.5rem;
-  }
-
-  .deviceStats {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-  }
-
-  .statLabel {
-    margin-bottom: 0;
-  }
 }
 
 @media (max-width: 480px) {
@@ -768,25 +425,5 @@
 
   .contentArea {
     padding: 1rem;
-  }
-
-  .deviceCard {
-    padding: 1rem;
-  }
-
-  .deviceHeader {
-    gap: 0.75rem;
-  }
-
-  .deviceIcon {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-
-  .consumptionInfo {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
   }
 }
