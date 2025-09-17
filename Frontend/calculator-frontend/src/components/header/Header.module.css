@@ -140,17 +140,22 @@
 }
 
 .signupBtn {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, #15803d, #84cc16);
   border: none;
-  color: #ffffff;
   padding: 0.625rem 1.5rem;
   border-radius: 50px;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  color: #ffffff; /* color inicial */
+}
+
+.signupBtn span {
   position: relative;
-  overflow: hidden;
+  z-index: 2; /* siempre encima del ::before */
 }
 
 .signupBtn::before {
@@ -162,7 +167,8 @@
   height: 100%;
   background: linear-gradient(135deg, #84cc16, #15803d);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index: 1; /* debajo del texto */
 }
 
 .signupBtn:hover::before {
@@ -171,8 +177,9 @@
 
 .signupBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(132, 204, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(132,204,22,0.4);
 }
+
 
 
 .hamburger {

@@ -14,7 +14,9 @@ const HomePage = () => {
               negocio
             </p>
             <div className={styles.heroButtons}>
-              <button className={styles.primaryBtn}>Calcular Ahora</button>
+              <button className={styles.primaryBtn}>
+                <span>Calcular Ahora</span>
+              </button>
               <button className={styles.secondaryBtn}>Ver Demo</button>
             </div>
           </div>

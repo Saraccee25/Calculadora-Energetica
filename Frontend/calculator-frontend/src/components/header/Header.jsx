@@ -21,7 +21,9 @@ const Header = () => {
         </nav>
         <div className={styles.authButtons}>
           <button className={styles.loginBtn}>Iniciar Sesión</button>
-          <button className={styles.signupBtn}>Registrarse</button>
+          <button className={styles.signupBtn}>
+            <span>Registrarse</span>
+          </button>
         </div>
         <div
           className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}

@@ -85,20 +85,23 @@
 }
 
 .primaryBtn {
-  /* Using hardcoded colors to ensure proper contrast */
-  background: #15803d;
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, #15803d, #84cc16);
   border: none;
-  color: #ffffff;
   padding: 1.125rem 2.5rem;
   border-radius: 50px;
   font-weight: 600;
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
   box-shadow: 0 4px 14px rgba(21, 128, 61, 0.3);
+  color: #ffffff; 
+}
+
+.primaryBtn span {
+  position: relative;
+  z-index: 2; 
 }
 
 .primaryBtn::before {
@@ -110,7 +113,8 @@
   height: 100%;
   background: linear-gradient(135deg, #84cc16, #15803d);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index: 1; 
 }
 
 .primaryBtn:hover::before {
@@ -119,8 +123,9 @@
 
 .primaryBtn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(21, 128, 61, 0.4);
+  box-shadow: 0 8px 25px rgba(21,128,61,0.4);
 }
+
 
 .secondaryBtn {
   background: transparent;
