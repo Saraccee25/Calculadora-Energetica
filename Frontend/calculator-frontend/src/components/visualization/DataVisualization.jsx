@@ -7,14 +7,21 @@ import styles from "./DataVisualization.module.css"
 const DataVisualization = () => {
   const [activeChart, setActiveChart] = useState("bars")
 
-  // Datos hardcodeados para las visualizaciones
-  const deviceData = [
-    { name: "Aire Acondicionado", consumption: 864, cost: 561600, percentage: 45.2 },
-    { name: "Refrigerador", consumption: 208, cost: 135200, percentage: 10.9 },
-    { name: "Televisores", consumption: 156, cost: 101400, percentage: 8.2 },
-    { name: "Computadoras", consumption: 208, cost: 135200, percentage: 10.9 },
-    { name: "Lavadora", consumption: 130, cost: 84500, percentage: 6.8 },
+  // Datos base (sin porcentaje manual)
+  const baseDeviceData = [
+    { name: "Aire Acondicionado", consumption: 864, cost: 561600 },
+    { name: "Refrigerador", consumption: 208, cost: 135200 },
+    { name: "Televisores", consumption: 156, cost: 101400 },
+    { name: "Computadoras", consumption: 208, cost: 135200 },
+    { name: "Lavadora", consumption: 130, cost: 84500 },
   ]
+
+  // Calcular total y porcentajes dinámicamente
+  const totalConsumption = baseDeviceData.reduce((sum, d) => sum + d.consumption, 0)
+  const deviceData = baseDeviceData.map((d) => ({
+    ...d,
+    percentage: ((d.consumption / totalConsumption) * 100).toFixed(1),
+  }))
 
   const monthlyData = [
     { month: "Ene", consumption: 1850, cost: 1202500 },
@@ -196,7 +203,7 @@ const DataVisualization = () => {
                   <strong>TOTAL</strong>
                 </td>
                 <td>
-                  <strong>{deviceData.reduce((sum, d) => sum + d.consumption, 0)}</strong>
+                  <strong>{totalConsumption}</strong>
                 </td>
                 <td>
                   <strong>${deviceData.reduce((sum, d) => sum + d.cost, 0).toLocaleString()}</strong>
@@ -205,7 +212,7 @@ const DataVisualization = () => {
                   <strong>100%</strong>
                 </td>
                 <td>
-                  <strong>{(deviceData.reduce((sum, d) => sum + d.consumption, 0) * 0.164).toFixed(2)}</strong>
+                  <strong>{(totalConsumption * 0.164).toFixed(2)}</strong>
                 </td>
               </tr>
             </tfoot>
