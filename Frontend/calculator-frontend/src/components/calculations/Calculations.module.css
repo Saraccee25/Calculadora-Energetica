@@ -2,10 +2,13 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.9) 100%);
+  min-height: 100vh;
 }
 
 .header {
   margin-bottom: 2rem;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .header h2 {
@@ -18,16 +21,18 @@
 .header p {
   color: var(--color-text-secondary);
   font-size: 1.1rem;
+  font-weight: 500;
 }
 
-
 .householdSummary {
-  background: var(--color-surface);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+  backdrop-filter: blur(10px);
   border-radius: var(--border-radius-lg);
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+  animation: fadeInUp 0.6s ease-out 0.1s both;
 }
 
 .householdSummary h3 {
@@ -47,50 +52,86 @@
 }
 
 .summaryCard {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 50%,
+    var(--color-secondary) 100%
+  );
   border-radius: var(--border-radius-md);
   padding: 1.5rem;
-  color: var(--color-text-primary);
+  color: --color-text-primary;
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: all var(--transition-duration) var(--transition-timing);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(21, 128, 61, 0.3);
+}
+
+.summaryCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.summaryCard:hover::before {
+  left: 100%;
 }
 
 .summaryCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(21, 128, 61, 0.4), 0 4px 16px rgba(21, 128, 61, 0.2);
 }
 
 .summaryIcon {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--border-radius-md);
   padding: 1rem;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+}
+
+.summaryCard:hover .summaryIcon {
+  transform: rotate(5deg) scale(1.1);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .summaryContent h4 {
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  opacity: 0.9;
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .summaryValue {
   font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .deviceTotals {
-  background: var(--color-surface);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+  backdrop-filter: blur(10px);
   border-radius: var(--border-radius-lg);
   padding: 2rem;
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+  animation: fadeInUp 0.6s ease-out 0.2s both;
 }
 
 .deviceTotals h3 {
@@ -107,14 +148,16 @@
 }
 
 .deviceCard {
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.95) 100%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--border-radius-md);
   padding: 1.5rem;
-  transition: all var(--transition-duration) var(--transition-timing);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); /* 👈 sombra por defecto */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
+  color: var(--color-text-primary); /* ✅ texto oscuro para contraste */
 }
 
 .deviceCard::before {
@@ -123,16 +166,16 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 4px;
   background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
   border-top-left-radius: var(--border-radius-md);
   border-top-right-radius: var(--border-radius-md);
 }
 
 .deviceCard:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* 👈 más sombra al hover */
-  transform: translateY(-3px);
+  border-color: rgba(21, 128, 61, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(21, 128, 61, 0.1);
+  transform: translateY(-6px) scale(1.01);
 }
 
 .deviceHeader {
@@ -143,8 +186,8 @@
 }
 
 .deviceIcon {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  color: var(-color-text-primary);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 1));
+  color: var(--color-primary); /* ✅ ícono verde sobre fondo claro */
   border-radius: var(--border-radius-md);
   padding: 0.75rem;
   font-size: 1.2rem;
@@ -152,45 +195,80 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.15);
+  transition: all 0.3s ease;
+}
+
+.deviceCard:hover .deviceIcon {
+  transform: rotate(-5deg) scale(1.05);
+  box-shadow: 0 6px 16px rgba(21, 128, 61, 0.25);
+}
+
+.deviceInfo h4 {
+  color: var(--color-text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.deviceDetails {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  margin: 0;
 }
 
 .deviceMetrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  border-top: 1px solid var(--color-border); /* 👈 separador */
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   padding-top: 1rem;
 }
 
 .metric {
-  background: var(--color-surface);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--border-radius-sm);
   padding: 0.75rem;
   text-align: center;
-  transition: background 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+  color: var(--color-text-primary); /* ✅ texto oscuro */
 }
 
 .metric:hover {
-  background: rgba(0, 0, 0, 0.03);
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.05) 0%, rgba(132, 204, 22, 0.05) 100%);
+  border-color: rgba(21, 128, 61, 0.2);
+  transform: translateY(-2px);
 }
 
 .metricLabel {
   color: var(--color-text-secondary);
   font-size: 0.8rem;
   font-weight: 500;
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 .metricValue {
-  color: var(--color-text-primary);
+  color: var(--color-primary); /* ✅ resalta en verde */
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
+  display: block;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-
-
-/* Responsive */
 @media (max-width: 768px) {
   .calculations {
     padding: 1rem;
