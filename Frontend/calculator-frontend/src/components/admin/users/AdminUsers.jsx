@@ -67,9 +67,11 @@ export default function AdminUsers(){
                 <td>{u.active ? "Activo":"Bloqueado"}</td>
                 <td>{new Date(u.createdAt).toLocaleDateString()}</td>
                 <td>
-                  <button className={ui.button} onClick={()=>{ setForm(u); setOpen("edit") }}>Editar</button>
-                  <button className={ui.button} onClick={()=>onToggleBlock(u)}>{u.active ? "Bloquear":"Desbloquear"}</button>
-                  <button className={ui.button} onClick={()=>onDelete(u)}>Borrar</button>
+                  <div className={ui.contentButtons}>
+                    <button className={ui.button} onClick={()=>{ setForm(u); setOpen("edit") }}>Editar</button>
+                    <button className={ui.button} onClick={()=>onToggleBlock(u)}>{u.active ? "Bloquear":"Desbloquear"}</button>
+                    <button className={ui.button} onClick={()=>onDelete(u)}>Borrar</button>
+                  </div>
                 </td>
               </tr>
             ))}
