@@ -49,7 +49,7 @@ export default function Settings(){
         </label>
       </div>
 
-      <div className={ui.footer} style={{justifyContent:"flex-end"}}>
+      <div className={ui.footer}>
         <button className={`${ui.button} ${ui.primary}`} onClick={save}>Guardar</button>
       </div>
     </div>
