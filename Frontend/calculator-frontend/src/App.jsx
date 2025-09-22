@@ -5,6 +5,8 @@ import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import { AuthProvider } from "./context/AuthContext"; 
 import ClientDashboard from "./pages/client/ClientDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
 import "./App.css";
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Register />} />
             <Route path="/client" element={<ClientDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>
