@@ -25,6 +25,7 @@
 
 /* Botones */
 .button {
+  margin: 2px;
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--foreground);
@@ -66,7 +67,7 @@
 }
 .table th,
 .table td {
-  padding: 0.9rem 1rem;
+  padding: 0.9rem 2rem;
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
