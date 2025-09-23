@@ -49,8 +49,7 @@ export default function Settings(){
         </label>
       </div>
 
-      {/* Botón de guardar alineado al contenido */}
-      <div style={{display:"flex", justifyContent:"flex-end", marginright:"303px"}}>
+      <div className={ui.footer}>
         <button className={`${ui.button} ${ui.primary}`} onClick={save}>Guardar</button>
       </div>
     </div>

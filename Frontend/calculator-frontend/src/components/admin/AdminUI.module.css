@@ -25,7 +25,6 @@
 
 /* Botones */
 .button {
-  margin: 2px;
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--foreground);
@@ -67,10 +66,16 @@
 }
 .table th,
 .table td {
-  padding: 0.9rem 2rem;
-  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
   text-align: left;
+
 }
+.table td .contentButtons{
+  display: flex;
+  justify-content: space-between  ;
+}
+
 .table thead th {
   background: linear-gradient(135deg, var(--background) 0%, var(--muted) 100%);
   color: var(--foreground);
@@ -112,7 +117,7 @@
 }
 .footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0.5rem;
   margin-top: 1rem;
 }

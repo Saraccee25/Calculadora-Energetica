@@ -67,8 +67,10 @@ export default function Tariffs(){
                 <td>{t.validTo ?? "—"}</td>
                 <td>{t.active ? "Vigente" : "Histórica"}</td>
                 <td>
+                  <div className={ui.contentButtons}>
                   <button className={ui.button} onClick={()=>{ setForm(t); setOpen("edit") }}>Editar</button>
                   <button className={ui.button} onClick={()=>onDelete(t.id)}>Borrar</button>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -59,22 +59,6 @@
   background: linear-gradient(135deg, var(--color-surface) 0%, rgba(21, 128, 61, 0.05) 100%);
 }
 
-.optimizationCard.animating {
-  animation: cardPulse 0.6s ease-out;
-}
-
-@keyframes cardPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .optimizationHeader {
   display: flex;
   justify-content: space-between;
@@ -102,22 +86,6 @@
   color: var(--color-primary);
   font-weight: bold;
   transition: all 0.2s ease;
-}
-
-.checkbox.checked {
-  animation: checkboxPop 0.3s ease-out;
-}
-
-@keyframes checkboxPop {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
 }
 
 .optimizationCard.selected .checkbox {
@@ -246,19 +214,6 @@
   font-weight: 700;
 }
 
-.value.counting {
-  animation: numberCount 0.1s ease-in-out infinite alternate;
-}
-
-@keyframes numberCount {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.05);
-  }
-}
-
 .unit {
   color: var(--color-text-secondary);
   font-size: 0.9rem;
@@ -282,40 +237,11 @@
   font-size: 1.5rem;
 }
 
-.comparisonArrow.pulsing {
-  animation: arrowPulse 1s ease-in-out infinite;
-}
-
-@keyframes arrowPulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
 .summaryCard {
   background: linear-gradient(135deg, var(--color-background) 0%, rgba(21, 128, 61, 0.05) 100%);
   border: 1px solid var(--color-primary);
   border-radius: var(--border-radius-lg);
   padding: 2rem;
-}
-
-.summaryCard.fadeIn {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .summaryCard h3 {
@@ -353,184 +279,6 @@
   font-size: 1rem;
 }
 
-.roiProgress {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.roiBar {
-  width: 100%;
-  height: 8px;
-  background: var(--color-border);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
-}
-
-.roiBarFill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--color-success), var(--color-primary));
-  border-radius: 4px;
-  transition: width 1s ease-out;
-  position: relative;
-}
-
-.roiBarFill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  animation: progressShine 2s ease-in-out infinite;
-}
-
-@keyframes progressShine {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-.roiLabel {
-  color: var(--color-text-primary);
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-align: center;
-  display: block;
-}
-
-.simulationControls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  background: var(--color-surface);
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--color-border);
-}
-
-.controlButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-sm);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.controlButton:hover:not(:disabled) {
-  background: var(--color-primary-dark);
-  transform: translateY(-1px);
-}
-
-.controlButton:disabled {
-  background: var(--color-text-secondary);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.speedControl {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
-}
-
-.speedControl label {
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
-}
-
-.speedSlider {
-  width: 80px;
-  height: 4px;
-  background: var(--color-border);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-}
-
-.speedSlider::-webkit-slider-thumb {
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.speedSlider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-}
-
-.optimizedCard {
-  position: relative;
-  overflow: hidden;
-}
-
-.optimizedCard::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(21, 128, 61, 0.1), transparent);
-  transform: rotate(45deg);
-  transition: all 0.6s ease;
-  opacity: 0;
-}
-
-.optimizedCard:hover::before {
-  animation: shimmer 1.5s ease-in-out;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-    opacity: 0;
-  }
-}
-
-.progressIndicator {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: var(--color-primary);
-  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-  width: 0;
-  transition: width 0.3s ease;
-}
-
-.optimizationCard.selected .progressIndicator {
-  width: 100%;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .simulatorContainer {
@@ -560,21 +308,5 @@
 
   .summaryGrid {
     grid-template-columns: 1fr;
-  }
-
-  .simulationControls {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .speedControl {
-    margin-left: 0;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .controlButton {
-    width: 100%;
-    justify-content: center;
   }
 }
