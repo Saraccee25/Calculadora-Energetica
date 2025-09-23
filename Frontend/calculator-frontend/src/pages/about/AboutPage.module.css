@@ -1,0 +1,363 @@
+.aboutPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.05) 0%, rgba(132, 204, 22, 0.05) 100%);
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.highlight {
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Mission & Vision */
+.missionVision {
+  padding: 4rem 0;
+}
+
+.mvGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.missionCard,
+.visionCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+  transition: all 0.3s ease;
+}
+
+.missionCard:hover,
+.visionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(21, 128, 61, 0.15);
+}
+
+.cardIcon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.missionCard h3,
+.visionCard h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.missionCard p,
+.visionCard p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Problem & Solution */
+.problemSolution {
+  padding: 4rem 0;
+  background: rgba(21, 128, 61, 0.02);
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.problemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.problemCard {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+  transition: all 0.3s ease;
+}
+
+.problemCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(21, 128, 61, 0.15);
+}
+
+.problemIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.problemCard h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.problemCard p {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Team Section */
+.team {
+  padding: 4rem 0;
+}
+
+.teamDescription {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.memberCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.memberCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.02), rgba(132, 204, 22, 0.02));
+  transition: left 0.3s ease;
+  z-index: 1;
+}
+
+.memberCard:hover::before {
+  left: 0;
+}
+
+.memberCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(21, 128, 61, 0.15);
+}
+
+.memberCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.memberAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 4px 15px rgba(21, 128, 61, 0.3);
+}
+
+.memberName {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.memberRole {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #15803d;
+  margin-bottom: 1rem;
+}
+
+.memberDescription {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* Impact Section */
+.impact {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.02), rgba(132, 204, 22, 0.02));
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.impactCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+  transition: all 0.3s ease;
+}
+
+.impactCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(21, 128, 61, 0.15);
+}
+
+.impactNumber {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.impactCard h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.impactCard p {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* CTA Section */
+.cta {
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  padding: 4rem 0;
+  text-align: center;
+  color: white;
+}
+
+.ctaContent h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.ctaContent p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.ctaBtn {
+  background: white;
+  color: #15803d;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mvGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .ctaContent h2 {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .problemGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .impactGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -23,6 +23,9 @@ function App() {
             <Route path="/recover" element={<Recover />} />
             <Route path="/client" element={<ClientDashboard />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/sobre-nosotros" element={<AboutPage />} />
+            <Route path="/contacto" element={<ContactPage />} />
+            <Route path="/calculadora" element={<CalculatorPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

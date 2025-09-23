@@ -1,0 +1,370 @@
+.calculatorPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.05) 0%, rgba(132, 204, 22, 0.05) 100%);
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.highlight {
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Calculator Section */
+.calculator {
+  padding: 4rem 0;
+}
+
+.calculatorGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Device Catalog */
+.catalogSection {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+}
+
+.deviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.deviceCard {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.02), rgba(132, 204, 22, 0.02));
+  border: 2px solid rgba(21, 128, 61, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.deviceCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.05), rgba(132, 204, 22, 0.05));
+  transition: left 0.3s ease;
+  z-index: 1;
+}
+
+.deviceCard:hover::before {
+  left: 0;
+}
+
+.deviceCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(21, 128, 61, 0.15);
+  border-color: rgba(21, 128, 61, 0.3);
+}
+
+.deviceCard.selected {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.1), rgba(132, 204, 22, 0.1));
+  border-color: #15803d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(21, 128, 61, 0.2);
+}
+
+.deviceCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.deviceIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.deviceCard h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.deviceCard p {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #15803d;
+  margin-bottom: 0.5rem;
+}
+
+.category {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  background: rgba(21, 128, 61, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Calculator Form */
+.formSection {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+}
+
+.calculatorForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+}
+
+.inputGroup input,
+.inputGroup select {
+  padding: 0.875rem 1rem;
+  border: 2px solid rgba(21, 128, 61, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(21, 128, 61, 0.02);
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  outline: none;
+  border-color: #15803d;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.1);
+  background: white;
+}
+
+.calculateBtn {
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.calculateBtn span {
+  position: relative;
+  z-index: 2;
+}
+
+.calculateBtn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #84cc16, #15803d);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.calculateBtn:hover::before {
+  opacity: 1;
+}
+
+.calculateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(21, 128, 61, 0.3);
+}
+
+/* Results Section */
+.resultsSection {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.1);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.resultCard {
+  background: linear-gradient(135deg, rgba(21, 128, 61, 0.02), rgba(132, 204, 22, 0.02));
+  border: 2px solid rgba(21, 128, 61, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.resultCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(21, 128, 61, 0.15);
+  border-color: rgba(21, 128, 61, 0.3);
+}
+
+.resultIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.resultCard h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.resultValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* CTA Section */
+.ctaSection {
+  background: linear-gradient(135deg, #15803d, #84cc16);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.ctaSection h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.ctaSection p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.ctaBtn {
+  background: white;
+  color: #15803d;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .calculatorGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .deviceGrid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .resultsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}
