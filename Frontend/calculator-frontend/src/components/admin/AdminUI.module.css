@@ -25,7 +25,6 @@
 
 /* Botones */
 .button {
-  margin: 2px;
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--foreground);
