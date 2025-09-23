@@ -64,8 +64,10 @@ export default function AdminDevices(){
                 <td>{d.lastSeenAt ? new Date(d.lastSeenAt).toLocaleString() : "—"}</td>
                 <td>{d.assignedToName ?? "Libre"}</td>
                 <td>
+                  <div className={ui.contentButtons}>
                   <button className={ui.button} onClick={()=>{ setForm(d); setOpen("edit") }}>Editar</button>
                   <button className={ui.button} onClick={()=>onDelete(d.id)}>Borrar</button>
+                  </div>
                 </td>
               </tr>
             ))}
