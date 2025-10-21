@@ -12,6 +12,7 @@ const Profile = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
+    estrato: user?.estrato || "", // 👈 nuevo campo
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -40,6 +41,10 @@ const Profile = ({ isOpen, onClose }) => {
       newErrors.email = "El email es requerido"
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Email inválido"
+    }
+
+    if (!formData.estrato) {
+      newErrors.estrato = "El estrato es requerido"
     }
 
     if (activeTab === "password") {
@@ -159,6 +164,23 @@ const Profile = ({ isOpen, onClose }) => {
                   placeholder="tu@email.com"
                 />
                 {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+              </div>
+
+              {/* 👇 Nuevo campo Estrato */}
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>Estrato</label>
+                <select
+                  name="estrato"
+                  value={formData.estrato}
+                  onChange={handleInputChange}
+                  className={`${styles.input} ${errors.estrato ? styles.inputError : ""}`}
+                >
+                  <option value="">Selecciona tu estrato</option>
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>{n}</option>
+                  ))}
+                </select>
+                {errors.estrato && <span className={styles.errorText}>{errors.estrato}</span>}
               </div>
             </div>
           )}
