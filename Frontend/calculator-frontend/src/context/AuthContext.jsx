@@ -1,21 +1,80 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
+import { getUserByEmail } from '../services/authService';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({ name: "Tara", email: "sara@email.com" });
-  //const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Escuchar cambios en el estado de autenticación de Firebase
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // Si hay usuario en Firebase Auth, obtener datos adicionales de Firestore
+        try {
+          const userData = await getUserByEmail(firebaseUser.email);
+          if (userData) {
+            setUser({
+              id: userData.id,
+              email: userData.email,
+              nombre: userData.nombre,
+              apellido: userData.apellido,
+              cedula: userData.cedula,
+              estrato: userData.estrato,
+              fechaRegistro: userData.fechaRegistro,
+              firebaseUid: firebaseUser.uid
+            });
+          } else {
+            setUser(null);
+          }
+        } catch (error) {
+          console.error('Error al obtener datos del usuario:', error);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const login = (userData) => {
-    setUser(userData); 
+    setUser(userData);
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      return {
+        success: true,
+        message: 'Sesión cerrada exitosamente'
+      };
+    } catch (error) {
+      console.error('Error en logout:', error);
+      return {
+        success: false,
+        errors: {
+          general: 'Error al cerrar sesión'
+        }
+      };
+    }
+  };
+
+  const value = {
+    user,
+    login,
+    logout,
+    loading
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
