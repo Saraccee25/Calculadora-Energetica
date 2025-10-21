@@ -1,10 +1,22 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { recoverPassword, loginUserWithFirebaseAuth, migrateExistingUsersToFirebaseAuth } from "../../services/authService";
 import styles from "./Login.module.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState("");
+  const [recoveryLoading, setRecoveryLoading] = useState(false);
+  const [recoveryMessage, setRecoveryMessage] = useState("");
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [migrationStatus, setMigrationStatus] = useState("");
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) => {
@@ -22,7 +34,7 @@ const Login = () => {
     if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -37,21 +49,111 @@ const Login = () => {
     if (Object.keys(newErrors).length) return;
 
     setIsLoading(true);
-    setTimeout(() => {
-      console.log("Login successful:", formData);
+    setSuccessMessage("");
+
+    try {
+      const result = await loginUserWithFirebaseAuth(formData.email, formData.password);
+
+      if (result.success) {
+        // Actualizar el contexto de autenticación con el usuario logueado
+        login(result.user);
+        setSuccessMessage(result.message);
+        // Redirigir al dashboard del cliente después de login exitoso
+        setTimeout(() => {
+          navigate('/client');
+        }, 1500);
+      } else {
+        setErrors(result.errors);
+      }
+    } catch (error) {
+      console.error("Error durante el login:", error);
+      setErrors({
+        general: "Error inesperado durante el inicio de sesión. Por favor intenta de nuevo."
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
+  };
+
+  const handlePasswordRecovery = async (e) => {
+    e.preventDefault();
+
+    if (!recoveryEmail) {
+      setRecoveryMessage("Por favor ingresa tu correo electrónico");
+      return;
+    }
+
+    if (!validateEmail(recoveryEmail)) {
+      setRecoveryMessage("Por favor ingresa un correo electrónico válido");
+      return;
+    }
+
+    setRecoveryLoading(true);
+    setRecoveryMessage("");
+
+    try {
+      const result = await recoverPassword(recoveryEmail);
+
+      if (result.success) {
+        setRecoveryMessage(result.message);
+        setRecoveryEmail("");
+        setTimeout(() => {
+          setIsRecoveryMode(false);
+          setRecoveryMessage("");
+        }, 3000);
+      } else {
+        setRecoveryMessage(result.errors.email || result.errors.general || "Error al enviar correo de recuperación");
+      }
+    } catch (error) {
+      console.error("Error durante la recuperación:", error);
+      setRecoveryMessage("Error inesperado durante la recuperación. Por favor intenta de nuevo.");
+    } finally {
+      setRecoveryLoading(false);
+    }
+  };
+
+  const toggleRecoveryMode = () => {
+    setIsRecoveryMode(!isRecoveryMode);
+    setRecoveryMessage("");
+    setRecoveryEmail("");
+    setErrors({});
+    setSuccessMessage("");
+  };
+
+  const handleMigrateUsers = async () => {
+    try {
+      setMigrationStatus("🔄 Migrando usuarios existentes a Firebase Auth...");
+      const result = await migrateExistingUsersToFirebaseAuth();
+
+      if (result.success) {
+        setMigrationStatus(`✅ ${result.message}`);
+        console.log("Resultado de migración:", result);
+      } else {
+        setMigrationStatus(`❌ Error durante la migración: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error durante la migración:", error);
+      setMigrationStatus("❌ Error inesperado durante la migración");
+    }
   };
 
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Iniciar Sesión</h1>
-          <p className={styles.subtitle}>Accede a tu cuenta de CalcuLuz</p>
+          <h1 className={styles.title}>
+            {isRecoveryMode ? "Recuperar Contraseña" : "Iniciar Sesión"}
+          </h1>
+          <p className={styles.subtitle}>
+            {isRecoveryMode
+              ? "Ingresa tu correo para recibir instrucciones de recuperación"
+              : "Accede a tu cuenta de CalcuLuz"
+            }
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
+        {!isRecoveryMode ? (
+          <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>Correo Electrónico</label>
             <input
@@ -74,21 +176,77 @@ const Login = () => {
             {errors.password && <span className={styles.error}>{errors.password}</span>}
 
             <div className={styles.forgotPassword}>
-              <a href="/recover" className={styles.link}>
+              <button
+                type="button"
+                onClick={toggleRecoveryMode}
+                className={styles.link}
+              >
                 ¿Olvidaste tu contraseña?
-              </a>
+              </button>
             </div>
           </div>
 
           {/* Mantengo exactamente tus clases */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`${styles.submitButton} ${isLoading ? styles.loading : ""}`}
-          >
-            {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`${styles.submitButton} ${isLoading ? styles.loading : ""}`}
+            >
+              {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            </button>
+
+            {successMessage && (
+              <div className={styles.successMessage}>
+                {successMessage}
+              </div>
+            )}
+
+            {errors.general && (
+              <div className={styles.errorMessage}>
+                {errors.general}
+              </div>
+            )}
+          </form>
+        ) : (
+          <form onSubmit={handlePasswordRecovery} className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="recoveryEmail" className={styles.label}>Correo Electrónico</label>
+              <input
+                type="email"
+                id="recoveryEmail"
+                value={recoveryEmail}
+                onChange={(e) => setRecoveryEmail(e.target.value)}
+                className={`${styles.input} ${recoveryMessage && !recoveryMessage.includes('enviado') ? styles.inputError : ""}`}
+                placeholder="tu@email.com"
+                autoComplete="email"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={recoveryLoading}
+              className={`${styles.submitButton} ${recoveryLoading ? styles.loading : ""}`}
+            >
+              {recoveryLoading ? "Enviando correo..." : "Enviar correo de recuperación"}
+            </button>
+
+            {recoveryMessage && (
+              <div className={`${styles.successMessage} ${!recoveryMessage.includes('enviado') ? styles.errorMessage : ""}`}>
+                {recoveryMessage}
+              </div>
+            )}
+
+            <div className={styles.footer}>
+              <button
+                type="button"
+                onClick={toggleRecoveryMode}
+                className={styles.link}
+              >
+                ← Volver al inicio de sesión
+              </button>
+            </div>
+          </form>
+        )}
 
         <div className={styles.footer}>
           <p>

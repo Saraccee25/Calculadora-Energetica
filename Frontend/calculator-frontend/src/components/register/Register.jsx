@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { registerUserWithFirebaseAuth } from "../../services/authService"
 import styles from "./Register.module.css"
 
 const Register = () => {
@@ -14,6 +15,7 @@ const Register = () => {
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("")
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -43,7 +45,6 @@ const Register = () => {
   const handleChange = (e) => {
     const { name, value } = e.target
 
-    // Special handling for cedula (only positive numbers)
     if (name === "cedula") {
       const numericValue = value.replace(/[^0-9]/g, "")
       setFormData((prev) => ({
@@ -51,7 +52,6 @@ const Register = () => {
         [name]: numericValue,
       }))
     }
-    // Special handling for names (no numbers)
     else if (name === "nombre" || name === "apellido") {
       const nameValue = value.replace(/[0-9]/g, "")
       setFormData((prev) => ({
@@ -65,7 +65,6 @@ const Register = () => {
       }))
     }
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -74,63 +73,68 @@ const Register = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    setErrors({})
+    setSuccessMessage("")
+
     const newErrors = {}
 
-    // Validate cedula
-    if (!formData.cedula) {
-      newErrors.cedula = "El número de cédula es requerido"
-    } else if (!validateCedula(formData.cedula)) {
+    if (!validateCedula(formData.cedula)) {
       newErrors.cedula = "La cédula debe ser un número positivo válido"
     }
 
-    // Validate nombre
-    if (!formData.nombre) {
-      newErrors.nombre = "El nombre es requerido"
-    } else if (!validateName(formData.nombre)) {
-      newErrors.nombre = "El nombre solo puede contener letras"
+    if (!validateName(formData.nombre)) {
+      newErrors.nombre = "El nombre solo puede contener letras y espacios"
     }
 
-    // Validate apellido
-    if (!formData.apellido) {
-      newErrors.apellido = "El apellido es requerido"
-    } else if (!validateName(formData.apellido)) {
-      newErrors.apellido = "El apellido solo puede contener letras"
+    if (!validateName(formData.apellido)) {
+      newErrors.apellido = "El apellido solo puede contener letras y espacios"
     }
 
-    // Validate estrato
+    if (!validateEmail(formData.email)) {
+      newErrors.email = "Ingresa un correo electrónico válido"
+    }
+
+    if (!validatePassword(formData.password)) {
+      newErrors.password = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales"
+    }
+
     if (!formData.estrato) {
-      newErrors.estrato = "El estrato social es requerido"
-    } else if (Number.parseInt(formData.estrato) < 1 || Number.parseInt(formData.estrato) > 6) {
-      newErrors.estrato = "El estrato debe estar entre 1 y 6"
+      newErrors.estrato = "Selecciona tu estrato social"
     }
 
-    // Validate email
-    if (!formData.email) {
-      newErrors.email = "El correo electrónico es requerido"
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = "Por favor ingresa un correo electrónico válido"
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      return
     }
 
-    // Validate password
-    if (!formData.password) {
-      newErrors.password = "La contraseña es requerida"
-    } else if (!validatePassword(formData.password)) {
-      newErrors.password =
-        "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales"
-    }
+    setIsLoading(true)
 
-    setErrors(newErrors)
+    try {
+      const result = await registerUserWithFirebaseAuth(formData)
 
-    if (Object.keys(newErrors).length === 0) {
-      setIsLoading(true)
-      // Simulate registration process
-      setTimeout(() => {
-        console.log("Registration successful:", formData)
-        setIsLoading(false)
-        // Here you would typically handle the registration logic
-      }, 2000)
+      if (result.success) {
+        setSuccessMessage(result.message)
+        setFormData({
+          cedula: "",
+          nombre: "",
+          apellido: "",
+          estrato: "",
+          email: "",
+          password: "",
+        })
+      } else {
+        setErrors(result.errors)
+      }
+    } catch (error) {
+      console.error("Error durante el registro:", error)
+      setErrors({
+        general: "Error inesperado durante el registro. Por favor intenta de nuevo."
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -257,6 +261,18 @@ const Register = () => {
           >
             {isLoading ? "Creando cuenta..." : "Crear Cuenta"}
           </button>
+
+          {successMessage && (
+            <div className={styles.successMessage}>
+              {successMessage}
+            </div>
+          )}
+
+          {errors.general && (
+            <div className={styles.errorMessage}>
+              {errors.general}
+            </div>
+          )}
         </form>
 
         <div className={styles.footer}>
