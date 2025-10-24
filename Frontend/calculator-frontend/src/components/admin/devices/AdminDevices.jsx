@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo } from "react"
 import Swal from "sweetalert2"
 import ui from "../AdminUI.module.css"
+import preloadedDevices from "../../../data/devices_preloaded.json" 
 
 export default function AdminDevices() {
   const [rows, setRows] = useState([])
@@ -19,35 +20,52 @@ export default function AdminDevices() {
   })
   const [editForm, setEditForm] = useState(null)
 
-  // 🔹 Cargar dispositivos
-  const fetchDevices = () => {
+  
+  const fetchDevices = async () => {
     setLoading(true)
-    fetch("http://localhost:8081/api/devices")
-      .then(async (res) => {
-        const data = await res.json()
-        if (Array.isArray(data)) setRows(data)
-        else throw new Error("Respuesta inesperada del servidor")
+    try {
+      const res = await fetch("http://localhost:8081/api/devices")
+      const data = await res.json()
+
+      if (!Array.isArray(data)) throw new Error("Respuesta inesperada del servidor")
+
+
+      const combined = [
+        ...preloadedDevices.map((d, i) => ({
+          id: `local-${i}`,
+          nombre: d.nombre,
+          categoria: d.categoria,
+          potenciaWatts: d.potenciaWatts,
+          horasUsoDiario: d.horasUsoDiario ?? 1,
+          diasUsoMensual: d.diasUsoMensual ?? 30,
+          origen: "predefinido",
+        })),
+        ...data.map((d) => ({ ...d, origen: "servidor" })),
+      ]
+
+      setRows(combined)
+    } catch (err) {
+      console.error("Error al obtener dispositivos:", err)
+      setError("No se pudieron cargar los dispositivos.")
+      Swal.fire({
+        title: "❌ Error",
+        text: "No se pudieron cargar los dispositivos desde el servidor.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
       })
-      .catch((err) => {
-        console.error("Error al obtener dispositivos:", err)
-        setError("No se pudieron cargar los dispositivos.")
-        Swal.fire({
-          title: "❌ Error",
-          text: "No se pudieron cargar los dispositivos desde el servidor.",
-          icon: "error",
-          confirmButtonText: "Aceptar",
-        })
-      })
-      .finally(() => setLoading(false))
+      setRows(preloadedDevices) 
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     fetchDevices()
   }, [])
 
-  // 🔹 Validaciones (corregida)
+ 
   const validateForm = (f) => {
-    if (!f.nombre || !f.nombre.toString().trim()) {
+    if (!f.nombre || !f.nombre.trim()) {
       Swal.fire("⚠️ Campo requerido", "El nombre es obligatorio.", "warning")
       return false
     }
@@ -55,21 +73,19 @@ export default function AdminDevices() {
       Swal.fire("⚠️ Nombre inválido", "El nombre no puede ser solo un número.", "warning")
       return false
     }
-    if (!f.categoria || !f.categoria.toString().trim()) {
+    if (!f.categoria.trim()) {
       Swal.fire("⚠️ Campo requerido", "Debe seleccionar una categoría.", "warning")
       return false
     }
-
     const potencia = Number(f.potenciaWatts)
     if (isNaN(potencia) || potencia <= 0) {
       Swal.fire("⚠️ Valor inválido", "La potencia debe ser un número positivo.", "warning")
       return false
     }
-
     return true
   }
 
-  // 🔹 Crear nuevo dispositivo
+
   const handleCreate = async () => {
     if (!validateForm(form)) return
 
@@ -79,8 +95,6 @@ export default function AdminDevices() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
-
-      const data = await res.text()
 
       if (res.ok) {
         Swal.fire({
@@ -100,16 +114,20 @@ export default function AdminDevices() {
         })
         fetchDevices()
       } else {
+        const data = await res.json()
         Swal.fire("❌ Error", data.error || "No se pudo agregar el dispositivo.", "error")
       }
-    } catch (err) {
-      console.error("Error al crear dispositivo:", err)
+    } catch {
       Swal.fire("❌ Error de conexión", "No se pudo conectar con el servidor.", "error")
     }
   }
 
-  // 🔹 Eliminar dispositivo
-  const handleDelete = async (id, nombre) => {
+  
+  const handleDelete = async (id, nombre, origen) => {
+    if (origen === "predefinido") {
+      return Swal.fire("⚠️ No permitido", "Los dispositivos predefinidos no pueden eliminarse.", "info")
+    }
+
     const confirm = await Swal.fire({
       title: "¿Estás seguro?",
       text: `Se eliminará el dispositivo "${nombre}"`,
@@ -120,34 +138,30 @@ export default function AdminDevices() {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     })
-
     if (!confirm.isConfirmed) return
 
     try {
       const res = await fetch(`http://localhost:8081/api/devices/${id}`, { method: "DELETE" })
-      const data = await res.json()
-
       if (res.ok) {
-        Swal.fire({
-          title: "🗑️ Eliminado",
-          text: data.message || "El dispositivo fue eliminado correctamente.",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        })
+        Swal.fire("🗑️ Eliminado", "El dispositivo fue eliminado correctamente.", "success")
         fetchDevices()
       } else {
+        const data = await res.json()
         Swal.fire("❌ Error", data.error || "No se pudo eliminar el dispositivo.", "error")
       }
-    } catch (err) {
-      console.error("Error al eliminar dispositivo:", err)
+    } catch {
       Swal.fire("❌ Error de conexión", "No se pudo conectar con el servidor.", "error")
     }
   }
 
-  // 🔹 Editar dispositivo
+ 
   const handleEdit = async () => {
     if (!validateForm(editForm)) return
+
+    if (editForm.origen === "predefinido") {
+      Swal.fire("⚠️ No permitido", "Los dispositivos predefinidos no pueden editarse.", "info")
+      return
+    }
 
     try {
       const res = await fetch(`http://localhost:8081/api/devices/${editForm.id}`, {
@@ -156,28 +170,19 @@ export default function AdminDevices() {
         body: JSON.stringify(editForm),
       })
 
-      const data = await res.text()
-
       if (res.ok) {
-        Swal.fire({
-          title: "✅ Actualizado",
-          text: "El dispositivo fue actualizado correctamente.",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        })
+        Swal.fire("✅ Actualizado", "El dispositivo fue actualizado correctamente.", "success")
         setShowEditModal(false)
         fetchDevices()
       } else {
+        const data = await res.json()
         Swal.fire("❌ Error", data.error || "No se pudo actualizar el dispositivo.", "error")
       }
-    } catch (err) {
-      console.error("Error al editar dispositivo:", err)
+    } catch {
       Swal.fire("❌ Error de conexión", "No se pudo conectar con el servidor.", "error")
     }
   }
 
-  // 🔹 Filtrado de búsqueda
   const filtered = useMemo(() => {
     return rows.filter((r) => {
       const text = `${r.nombre} ${r.categoria}`.toLowerCase()
@@ -193,16 +198,16 @@ export default function AdminDevices() {
       <div className={ui.controls}>
         <input
           className={ui.input}
-          placeholder="Buscar dispositivo o categoría"
+          placeholder="🔍 Buscar dispositivo o categoría"
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
         <button className={`${ui.button} ${ui.primary}`} onClick={() => setShowModal(true)}>
-          Nuevo
+          ➕ Nuevo Dispositivo
         </button>
       </div>
 
-      {/* 🧩 Tabla de dispositivos */}
+      
       <div className={ui.tableWrap}>
         <table className={ui.table}>
           <thead>
@@ -210,6 +215,7 @@ export default function AdminDevices() {
               <th>Nombre</th>
               <th>Categoría</th>
               <th>Potencia (W)</th>
+              <th>Origen</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -220,28 +226,31 @@ export default function AdminDevices() {
                   <td>{d.nombre}</td>
                   <td>{d.categoria}</td>
                   <td>{d.potenciaWatts}</td>
+                  <td>{d.origen === "predefinido" ? "📘 Predeterminado" : "☁️ Servidor"}</td>
                   <td>
-                    <button
-                      className={`${ui.button} ${ui.secondary}`}
-                      onClick={() => {
-                        setEditForm(d)
-                        setShowEditModal(true)
-                      }}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className={`${ui.button} ${ui.danger}`}
-                      onClick={() => handleDelete(d.id, d.nombre)}
-                    >
-                      Eliminar
-                    </button>
+                    <div className={ui.contentButtons}>
+                      <button
+                        className={`${ui.button} ${ui.secondary}`}
+                        onClick={() => {
+                          setEditForm(d)
+                          setShowEditModal(true)
+                        }}
+                      >
+                        ✏️ Editar
+                      </button>
+                      <button
+                        className={`${ui.button} ${ui.danger}`}
+                        onClick={() => handleDelete(d.id, d.nombre, d.origen)}
+                      >
+                        🗑️ Eliminar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={4} className={ui.empty}>
+                <td colSpan={5} className={ui.empty}>
                   Sin resultados
                 </td>
               </tr>
@@ -250,33 +259,34 @@ export default function AdminDevices() {
         </table>
       </div>
 
-      {/* 🪟 Modal de creación */}
+      
       {showModal && (
         <div className={ui.modalOverlay}>
           <div className={ui.modal}>
             <h2>🆕 Nuevo dispositivo</h2>
-            <label>Nombre</label>
+
+            <label>Nombre del dispositivo</label>
             <input
               className={ui.input}
               value={form.nombre}
               onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-              placeholder="Ej: Refrigerador"
+              placeholder="Ej: Refrigerador Samsung"
             />
 
             <label>Categoría</label>
             <select
-              className={ui.input}
+              className={ui.select}
               value={form.categoria}
               onChange={(e) => setForm({ ...form, categoria: e.target.value })}
             >
-              <option value="Cocina">Cocina</option>
-              <option value="Sala">Sala</option>
-              <option value="Dormitorio">Dormitorio</option>
-              <option value="Baño">Baño</option>
-              <option value="Lavandería">Lavandería</option>
+              <option value="Cocina">🍳 Cocina</option>
+              <option value="Sala">🛋️ Sala</option>
+              <option value="Dormitorio">🛏️ Dormitorio</option>
+              <option value="Baño">🚿 Baño</option>
+              <option value="Lavandería">🧺 Lavandería</option>
             </select>
 
-            <label>Potencia (W)</label>
+            <label>Potencia (Watts)</label>
             <input
               className={ui.input}
               type="number"
@@ -286,23 +296,13 @@ export default function AdminDevices() {
             />
 
             <label>Horas de uso diario</label>
-            <input
-              className={ui.input}
-              type="number"
-              value={form.horasUsoDiario}
-              readOnly
-            />
+            <input className={ui.input} type="number" value={form.horasUsoDiario} readOnly />
 
             <label>Días de uso mensual</label>
-            <input
-              className={ui.input}
-              type="number"
-              value={form.diasUsoMensual}
-              readOnly
-            />
+            <input className={ui.input} type="number" value={form.diasUsoMensual} readOnly />
 
             <p className={ui.note}>
-              ⚙️ Las horas y días son predeterminados (el cliente podrá modificarlos desde su cuenta).
+              ⚙️ Las horas y días son predeterminados. El cliente podrá modificarlos desde su cuenta.
             </p>
 
             <div className={ui.modalActions}>
@@ -310,20 +310,20 @@ export default function AdminDevices() {
                 Cancelar
               </button>
               <button className={`${ui.button} ${ui.primary}`} onClick={handleCreate}>
-                Guardar
+                💾 Guardar
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 🪟 Modal de edición */}
+     
       {showEditModal && editForm && (
         <div className={ui.modalOverlay}>
           <div className={ui.modal}>
             <h2>✏️ Editar dispositivo</h2>
 
-            <label>Nombre</label>
+            <label>Nombre del dispositivo</label>
             <input
               className={ui.input}
               value={editForm.nombre}
@@ -332,18 +332,18 @@ export default function AdminDevices() {
 
             <label>Categoría</label>
             <select
-              className={ui.input}
+              className={ui.select}
               value={editForm.categoria}
               onChange={(e) => setEditForm({ ...editForm, categoria: e.target.value })}
             >
-              <option value="Cocina">Cocina</option>
-              <option value="Sala">Sala</option>
-              <option value="Dormitorio">Dormitorio</option>
-              <option value="Baño">Baño</option>
-              <option value="Lavandería">Lavandería</option>
+              <option value="Cocina">🍳 Cocina</option>
+              <option value="Sala">🛋️ Sala</option>
+              <option value="Dormitorio">🛏️ Dormitorio</option>
+              <option value="Baño">🚿 Baño</option>
+              <option value="Lavandería">🧺 Lavandería</option>
             </select>
 
-            <label>Potencia (W)</label>
+            <label>Potencia (Watts)</label>
             <input
               className={ui.input}
               type="number"
@@ -356,7 +356,7 @@ export default function AdminDevices() {
                 Cancelar
               </button>
               <button className={`${ui.button} ${ui.primary}`} onClick={handleEdit}>
-                Actualizar
+                💾 Actualizar
               </button>
             </div>
           </div>
