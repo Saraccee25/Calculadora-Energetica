@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaPlus, FaTrash, FaTv, FaSnowflake, FaFire, FaWater, FaDesktop, FaLaptop, FaPlug } from "react-icons/fa";
 import styles from "./Devices.module.css";
+import preloadedDevices from "../../data/devices_preloaded.json";
 
 const iconMap = {
   "Entretenimiento": FaTv,
@@ -25,26 +26,46 @@ const Devices = () => {
     weeklyDays: 7,
   });
 
-  // 🔹 Cargar los dispositivos del backend
-  useEffect(() => {
-    fetch("http://localhost:8081/api/devices")
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener dispositivos");
-        return res.json();
-      })
-      .then((data) => {
-        const devicesWithIcons = data.map((device) => ({
-          ...device,
-          icon: iconMap[device.categoria] || FaPlug,
-        }));
-        setDeviceCatalog(devicesWithIcons);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error al cargar dispositivos:", err);
-        setLoading(false);
-      });
-  }, []);
+  
+ useEffect(() => {
+  const fetchAllDevices = async () => {
+    try {
+      
+      const res = await fetch("http://localhost:8081/api/devices");
+      if (!res.ok) throw new Error("Error al obtener dispositivos del servidor");
+      const serverDevices = await res.json();
+
+      
+      const localDevices = preloadedDevices; 
+
+      
+      const combined = [
+        ...localDevices.map((d) => ({
+          ...d,
+          id: `local-${d.nombre}`, 
+        })),
+        ...serverDevices,
+      ];
+
+     
+      const devicesWithIcons = combined.map((device) => ({
+        ...device,
+        icon: iconMap[device.categoria] || FaPlug,
+      }));
+
+      setDeviceCatalog(devicesWithIcons);
+    } catch (err) {
+      console.error("Error al cargar dispositivos combinados:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchAllDevices();
+}, []);
+
+
+
 
   const addDevice = () => {
     if (!selectedDevice) return;
