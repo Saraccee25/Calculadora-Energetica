@@ -1,0 +1,345 @@
+[
+  {
+    "nombre": "Nevera 240 L (1 puerta)",
+    "categoria": "Cocina",
+    "potenciaWatts": "150 W",
+    "horasUsoDiario": "24 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Nevera 350 L (2 puertas)",
+    "categoria": "Cocina",
+    "potenciaWatts": "200 W",
+    "horasUsoDiario": "24 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Nevecon 500 L (Side-by-Side)",
+    "categoria": "Cocina",
+    "potenciaWatts": "350 W",
+    "horasUsoDiario": "24 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Congelador 200 L (horizontal)",
+    "categoria": "Cocina",
+    "potenciaWatts": "120 W",
+    "horasUsoDiario": "24 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Horno microondas 20 L",
+    "categoria": "Cocina",
+    "potenciaWatts": "1200 W",
+    "horasUsoDiario": "0.3 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Horno eléctrico 42 L",
+    "categoria": "Cocina",
+    "potenciaWatts": "1500 W",
+    "horasUsoDiario": "0.5 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Parrilla eléctrica 2 quemadores",
+    "categoria": "Cocina",
+    "potenciaWatts": "1500 W",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Licuadora 1.25 L",
+    "categoria": "Cocina",
+    "potenciaWatts": "400 W",
+    "horasUsoDiario": "0.1 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Cafetera eléctrica 12 tazas",
+    "categoria": "Cocina",
+    "potenciaWatts": "800 W",
+    "horasUsoDiario": "0.5 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Olla arrocera 1.8 L (10 tazas)",
+    "categoria": "Cocina",
+    "potenciaWatts": "700 W",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Tostadora (2 rebanadas)",
+    "categoria": "Cocina",
+    "potenciaWatts": "800 W",
+    "horasUsoDiario": "0.1 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Sanduchera (grill 2 panes)",
+    "categoria": "Cocina",
+    "potenciaWatts": "700 W",
+    "horasUsoDiario": "0.1 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Freidora de aire 4 L",
+    "categoria": "Cocina",
+    "potenciaWatts": "1400 W",
+    "horasUsoDiario": "0.5 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Lavavajillas 12 servicios",
+    "categoria": "Cocina",
+    "potenciaWatts": "2000 W",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Lavadora 9 kg (carga superior)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "500 W",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Lavadora 9 kg (carga frontal)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "2000 W (con calentador)",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Lavadora 8 kg (semiautomática)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "200 W",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Secadora de ropa 8 kg (eléctrica)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "1800 W",
+    "horasUsoDiario": "1.0 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Plancha de ropa (a vapor)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "1000 W",
+    "horasUsoDiario": "0.5 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Aspiradora (trineo 1200 W)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "1200 W",
+    "horasUsoDiario": "0.2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Secador de pelo (mano)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "2000 W",
+    "horasUsoDiario": "0.1 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Máquina de coser (doméstica)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "90 W",
+    "horasUsoDiario": "0.2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Plancha de cabello (alisadora)",
+    "categoria": "Lavandería",
+    "potenciaWatts": "50 W",
+    "horasUsoDiario": "0.1 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Ventilador de pedestal 16″",
+    "categoria": "Clima",
+    "potenciaWatts": "60 W",
+    "horasUsoDiario": "8 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Ventilador de techo 52″",
+    "categoria": "Clima",
+    "potenciaWatts": "75 W",
+    "horasUsoDiario": "8 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Aire acondicionado 9000 BTU (split)",
+    "categoria": "Clima",
+    "potenciaWatts": "1000 W",
+    "horasUsoDiario": "6 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Aire acondicionado 12000 BTU (split)",
+    "categoria": "Clima",
+    "potenciaWatts": "1200 W",
+    "horasUsoDiario": "6 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Calefactor eléctrico 1500 W (portátil)",
+    "categoria": "Clima",
+    "potenciaWatts": "1500 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Deshumidificador 10 L/día",
+    "categoria": "Clima",
+    "potenciaWatts": "200 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Ducha eléctrica 5400 W (instantánea)",
+    "categoria": "Clima",
+    "potenciaWatts": "5400 W",
+    "horasUsoDiario": "0.25 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Purificador de aire (HEPA)",
+    "categoria": "Clima",
+    "potenciaWatts": "50 W",
+    "horasUsoDiario": "8 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Televisor LED 32″ (HD)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "50 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Televisor LED 50″ (4K)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "100 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Minicomponente / Equipo de sonido",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "100 W",
+    "horasUsoDiario": "2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Decodificador TV (TDT/Cable)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "10 W",
+    "horasUsoDiario": "24 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Reproductor DVD/Blu-ray",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "15 W",
+    "horasUsoDiario": "0.5 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Consola de videojuegos",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "150 W",
+    "horasUsoDiario": "2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Computador de escritorio (torre)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "200 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Monitor LED 21.5″ (FHD)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "30 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Computador portátil (14″)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "60 W",
+    "horasUsoDiario": "4 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Router WiFi doméstico",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "10 W",
+    "horasUsoDiario": "24 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Cargador de celular (smartphone)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "5 W",
+    "horasUsoDiario": "2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Impresora multifunción (inkjet)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "30 W (300 W en uso)",
+    "horasUsoDiario": "0.1 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Tablet (carga)",
+    "categoria": "Entretenimiento",
+    "potenciaWatts": "10 W",
+    "horasUsoDiario": "2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Procesador de alimentos 12 tazas",
+    "categoria": "Cocina",
+    "potenciaWatts": "800 W",
+    "horasUsoDiario": "0.2 h",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Extractor de jugos centrífugo ",
+    "categoria": " Cocina ",
+    "potenciaWatts": " 600 W",
+    "horasUsoDiario": " 0.15 h/día ",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Proyector doméstico FHD ",
+    "categoria": " Entretenimiento ",
+    "potenciaWatts": " 280 W ",
+    "horasUsoDiario": " 2 h/día ",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Barra de sonido 2.1 ",
+    "categoria": " Entretenimiento ",
+    "potenciaWatts": " 40 W ",
+    "horasUsoDiario": " 2 h/día ",
+    "diasUsoMensual": 1
+  },
+  {
+    "nombre": "Bombilla LED E27 9 W ",
+    "categoria": " Iluminación ",
+    "potenciaWatts": " 9 W ",
+    "horasUsoDiario": " 5 h/día ",
+    "diasUsoMensual": 1
+  }
+]
