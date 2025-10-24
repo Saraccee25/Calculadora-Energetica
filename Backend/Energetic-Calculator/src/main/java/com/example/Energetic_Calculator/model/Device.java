@@ -2,14 +2,14 @@ package com.example.Energetic_Calculator.model;
 
 public class Device {
 
-    private String id; // Firestore genera este ID automáticamente si lo dejas null
+    private String id;
     private String nombre;
-    private String categoria; // Cocina, Lavandería, Clima, etc.
+    private String categoria;
     private int potenciaWatts;
     private float horasUsoDiario;
     private int diasUsoMensual;
 
-    // Constructor vacío
+
     public Device() {
     }
 
@@ -23,7 +23,7 @@ public class Device {
         this.diasUsoMensual = diasUsoMensual;
     }
 
-    // Getters y Setters
+
 
     public String getId() {
         return id;
@@ -73,7 +73,7 @@ public class Device {
         this.diasUsoMensual = diasUsoMensual;
     }
 
-    // Opcional: método toString() para depuración
+
     @Override
     public String toString() {
         return "Device{" +
