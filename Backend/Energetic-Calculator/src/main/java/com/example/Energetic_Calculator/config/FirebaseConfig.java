@@ -22,17 +22,23 @@ public class FirebaseConfig {
     @Value("${firebase.project-id}")
     private String projectId;
 
+    @Value("${firebase.database-url}")
+    private String databaseUrl; // 👈 agregamos esta línea
+
     @PostConstruct
     public void initializeFirebase() throws IOException {
-        InputStream serviceAccount = new ClassPathResource(serviceAccountKeyPath).getInputStream();
+        try (InputStream serviceAccount = new ClassPathResource(serviceAccountKeyPath).getInputStream()) {
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setProjectId(projectId)
-                .build();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setProjectId(projectId)
+                    .setDatabaseUrl(databaseUrl) // 👈 ESTA ES LA CLAVE
+                    .build();
 
-        if (FirebaseApp.getApps().isEmpty()) {
-            FirebaseApp.initializeApp(options);
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+                System.out.println("✅ Firebase inicializado correctamente con Realtime Database");
+            }
         }
     }
 
