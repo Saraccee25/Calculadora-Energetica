@@ -42,8 +42,8 @@ const Login = () => {
     else if (!validateEmail(formData.email)) newErrors.email = "Por favor ingresa un correo electrónico válido";
 
     if (!formData.password) newErrors.password = "La contraseña es requerida";
-    else if (!validatePassword(formData.password))
-      newErrors.password = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
+    // else if (!validatePassword(formData.password))
+    //   newErrors.password = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length) return;
@@ -154,39 +154,39 @@ const Login = () => {
 
         {!isRecoveryMode ? (
           <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>Correo Electrónico</label>
-            <input
-              type="email" id="email" name="email"
-              value={formData.email} onChange={handleChange}
-              className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
-              placeholder="tu@email.com" autoComplete="email"
-            />
-            {errors.email && <span className={styles.error}>{errors.email}</span>}
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>Contraseña</label>
-            <input
-              type="password" id="password" name="password"
-              value={formData.password} onChange={handleChange}
-              className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
-              placeholder="••••••••" autoComplete="current-password"
-            />
-            {errors.password && <span className={styles.error}>{errors.password}</span>}
-
-            <div className={styles.forgotPassword}>
-              <button
-                type="button"
-                onClick={toggleRecoveryMode}
-                className={styles.link}
-              >
-                ¿Olvidaste tu contraseña?
-              </button>
+            <div className={styles.inputGroup}>
+              <label htmlFor="email" className={styles.label}>Correo Electrónico</label>
+              <input
+                type="email" id="email" name="email"
+                value={formData.email} onChange={handleChange}
+                className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
+                placeholder="tu@email.com" autoComplete="email"
+              />
+              {errors.email && <span className={styles.error}>{errors.email}</span>}
             </div>
-          </div>
 
-          {/* Mantengo exactamente tus clases */}
+            <div className={styles.inputGroup}>
+              <label htmlFor="password" className={styles.label}>Contraseña</label>
+              <input
+                type="password" id="password" name="password"
+                value={formData.password} onChange={handleChange}
+                className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
+                placeholder="••••••••" autoComplete="current-password"
+              />
+              {errors.password && <span className={styles.error}>{errors.password}</span>}
+
+              <div className={styles.forgotPassword}>
+                <button
+                  type="button"
+                  onClick={toggleRecoveryMode}
+                  className={styles.link}
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+            </div>
+
+            {/* Mantengo exactamente tus clases */}
             <button
               type="submit"
               disabled={isLoading}
