@@ -57,10 +57,17 @@ const Login = () => {
       if (result.success) {
         // Actualizar el contexto de autenticación con el usuario logueado
         login(result.user);
+        // Guardar ID token en localStorage
+        try {
+          const token = await result.firebaseUser.getIdToken();
+          localStorage.setItem('authToken', token);
+        } catch (e) {
+          console.error("No se pudo guardar el ID token:", e);
+        }
         setSuccessMessage(result.message);
-        // Redirigir al dashboard del cliente después de login exitoso
+        // Redirigir según rol: 1 admin, 2 cliente
         setTimeout(() => {
-          navigate('/client');
+          navigate(result.user.role === 1 ? '/admin' : '/client');
         }, 1500);
       } else {
         setErrors(result.errors);
