@@ -34,6 +34,7 @@ const Login = () => {
     if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
   };
 
+        // Actualizar el contexto de autenticación con el usuario logueado
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
@@ -42,8 +43,8 @@ const Login = () => {
     else if (!validateEmail(formData.email)) newErrors.email = "Por favor ingresa un correo electrónico válido";
 
     if (!formData.password) newErrors.password = "La contraseña es requerida";
-    // else if (!validatePassword(formData.password))
-    //   newErrors.password = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
+    else if (!validatePassword(formData.password))
+      newErrors.password = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length) return;
@@ -57,10 +58,17 @@ const Login = () => {
       if (result.success) {
         // Actualizar el contexto de autenticación con el usuario logueado
         login(result.user);
+        // Guardar ID token en localStorage
+        try {
+          const token = await result.firebaseUser.getIdToken();
+          localStorage.setItem('authToken', token);
+        } catch (e) {
+          console.error("No se pudo guardar el ID token:", e);
+        }
         setSuccessMessage(result.message);
-        // Redirigir al dashboard del cliente después de login exitoso
+        // Redirigir según rol: 1 admin, 2 cliente
         setTimeout(() => {
-          navigate('/client');
+          navigate(result.user.role === 1 ? '/admin' : '/client');
         }, 1500);
       } else {
         setErrors(result.errors);
@@ -154,39 +162,38 @@ const Login = () => {
 
         {!isRecoveryMode ? (
           <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="email" className={styles.label}>Correo Electrónico</label>
-              <input
-                type="email" id="email" name="email"
-                value={formData.email} onChange={handleChange}
-                className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
-                placeholder="tu@email.com" autoComplete="email"
-              />
-              {errors.email && <span className={styles.error}>{errors.email}</span>}
+          <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>Correo Electrónico</label>
+            <input
+              type="email" id="email" name="email"
+              value={formData.email} onChange={handleChange}
+              className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
+              placeholder="tu@email.com" autoComplete="email"
+            />
+            {errors.email && <span className={styles.error}>{errors.email}</span>}
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.label}>Contraseña</label>
+            <input
+              type="password" id="password" name="password"
+              value={formData.password} onChange={handleChange}
+              className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
+              placeholder="••••••••" autoComplete="current-password"
+            />
+            {errors.password && <span className={styles.error}>{errors.password}</span>}
+
+            <div className={styles.forgotPassword}>
+              <button
+                type="button"
+                onClick={toggleRecoveryMode}
+                className={styles.link}
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label htmlFor="password" className={styles.label}>Contraseña</label>
-              <input
-                type="password" id="password" name="password"
-                value={formData.password} onChange={handleChange}
-                className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
-                placeholder="••••••••" autoComplete="current-password"
-              />
-              {errors.password && <span className={styles.error}>{errors.password}</span>}
-
-              <div className={styles.forgotPassword}>
-                <button
-                  type="button"
-                  onClick={toggleRecoveryMode}
-                  className={styles.link}
-                >
-                  ¿Olvidaste tu contraseña?
-                </button>
-              </div>
-            </div>
-
-            {/* Mantengo exactamente tus clases */}
+          {/* Mantengo exactamente tus clases */}
             <button
               type="submit"
               disabled={isLoading}

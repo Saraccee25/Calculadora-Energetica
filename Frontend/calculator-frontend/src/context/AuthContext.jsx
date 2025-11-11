@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const userData = await getUserByEmail(firebaseUser.email);
           if (userData) {
-            setUser({
+            const composedUser = {
               id: userData.id,
               email: userData.email,
               nombre: userData.nombre,
@@ -25,17 +25,28 @@ export const AuthProvider = ({ children }) => {
               cedula: userData.cedula,
               estrato: userData.estrato,
               fechaRegistro: userData.fechaRegistro,
-              firebaseUid: firebaseUser.uid
-            });
+              firebaseUid: firebaseUser.uid,
+              role: userData.role
+            };
+            setUser(composedUser);
+            try {
+              const token = await firebaseUser.getIdToken();
+              localStorage.setItem('authToken', token);
+            } catch (e) {
+              console.error('No se pudo obtener y guardar el ID token:', e);
+            }
           } else {
             setUser(null);
+            localStorage.removeItem('authToken');
           }
         } catch (error) {
           console.error('Error al obtener datos del usuario:', error);
           setUser(null);
+          localStorage.removeItem('authToken');
         }
       } else {
         setUser(null);
+        localStorage.removeItem('authToken');
       }
       setLoading(false);
     });
@@ -51,6 +62,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
       setUser(null);
+      localStorage.removeItem('authToken');
       return {
         success: true,
         message: 'Sesión cerrada exitosamente'

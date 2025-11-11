@@ -411,7 +411,8 @@ export const registerUserWithFirebaseAuth = async (userData) => {
       firebaseUid: authResult.uid,
       fechaRegistro: serverTimestamp(),
       activo: true,
-      authProvider: 'firebase'
+      authProvider: 'firebase',
+      role: 2
     };
 
     const usersRef = collection(db, 'users');
@@ -498,7 +499,8 @@ export const loginUserWithFirebaseAuth = async (email, password) => {
         cedula: userData.cedula,
         estrato: userData.estrato,
         fechaRegistro: userData.fechaRegistro,
-        firebaseUid: firebaseUser.uid
+        firebaseUid: firebaseUser.uid,
+        role: userData.role
       },
       firebaseUser: firebaseUser,
       message: 'Inicio de sesión exitoso'

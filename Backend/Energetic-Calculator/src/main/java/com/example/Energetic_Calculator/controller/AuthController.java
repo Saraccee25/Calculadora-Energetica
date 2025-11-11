@@ -1,3 +1,4 @@
+    }
 package com.example.Energetic_Calculator.controller;
 
 import com.example.Energetic_Calculator.service.FirebaseAuthService;

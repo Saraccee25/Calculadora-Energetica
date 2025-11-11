@@ -177,4 +177,10 @@ const Header = () => {
   );
 };
 
-export default Header;
+     
+      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+    </>
+  )
+}
+
+export default Header

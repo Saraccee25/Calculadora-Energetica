@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Recover from "./components/recover/recover";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 import "./App.css";
 
@@ -21,8 +22,22 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Register />} />
             <Route path="/recover" element={<Recover />} />
-            <Route path="/client" element={<ClientDashboard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route
+              path="/client"
+              element={
+                <ProtectedRoute requiredRole={2}>
+                  <ClientDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requiredRole={1}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>
