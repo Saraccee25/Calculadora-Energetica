@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Firebase Out
+calculadora-electronica-firebase-adminsdk-fbsvc-19ae2261d4.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -56,3 +59,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Archivos de configuración y credenciales
+*.json
+*.key
+*.p12
+*.pem
+/src/main/resources/*.json

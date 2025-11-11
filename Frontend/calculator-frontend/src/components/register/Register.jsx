@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { registerUserWithFirebaseAuth } from "../../services/authService"
+import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css"
 
 const Register = () => {
@@ -16,6 +17,8 @@ const Register = () => {
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
+
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -125,6 +128,7 @@ const Register = () => {
           email: "",
           password: "",
         })
+        navigate("/client");
       } else {
         setErrors(result.errors)
       }
@@ -133,7 +137,6 @@ const Register = () => {
       setErrors({
         general: "Error inesperado durante el registro. Por favor intenta de nuevo."
       })
-    } finally {
       setIsLoading(false)
     }
   }

@@ -1,3 +1,4 @@
+    }
 package com.example.Energetic_Calculator.controller;
 
 import com.example.Energetic_Calculator.service.FirebaseAuthService;
@@ -10,6 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
+
 public class AuthController {
 
     private final FirebaseAuthService authService;

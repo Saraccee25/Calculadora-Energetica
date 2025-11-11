@@ -34,6 +34,7 @@ const Login = () => {
     if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
   };
 
+        // Actualizar el contexto de autenticación con el usuario logueado
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
@@ -191,7 +192,6 @@ const Login = () => {
                 ¿Olvidaste tu contraseña?
               </button>
             </div>
-          </div>
 
           {/* Mantengo exactamente tus clases */}
             <button
