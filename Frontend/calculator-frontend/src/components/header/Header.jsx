@@ -173,14 +173,9 @@ const Header = () => {
         onConfirm={handleConfirmModalConfirm}
         onCancel={() => setOpenConfirmModal(false)}
       />
+      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
     </>
   );
 };
 
-     
-      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
-    </>
-  )
-}
-
-export default Header
+export default Header;
