@@ -50,9 +50,9 @@ const Login = () => {
       newErrors.email = "Por favor ingresa un correo electrónico válido";
 
     if (!formData.password) newErrors.password = "La contraseña es requerida";
-    else if (!validatePassword(formData.password))
-      newErrors.password =
-        "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
+    // else if (!validatePassword(formData.password))
+    //   newErrors.password =
+    //     "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length) return;
@@ -230,13 +230,14 @@ const Login = () => {
                 </button>
               </div>
             </div>
-            {/* Mantengo exactamente tus clases */}
+
             <button
               type="submit"
               disabled={isLoading}
               className={`${styles.submitButton} ${
                 isLoading ? styles.loading : ""
               }`}
+              onClick={handleSubmit}
             >
               {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
             </button>

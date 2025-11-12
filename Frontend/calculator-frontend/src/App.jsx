@@ -3,14 +3,15 @@ import Layout from "./pages/layout/Layout";
 import HomePage from "./pages/homepage/HomePage";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
-import { AuthProvider } from "./context/AuthContext"; 
+import { AuthProvider } from "./context/AuthContext";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Recover from "./components/recover/recover";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
-
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             />
           </Route>
         </Routes>
+        <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       </BrowserRouter>
     </AuthProvider>
   );
