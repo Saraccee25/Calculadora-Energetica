@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { recoverPassword, loginUserWithFirebaseAuth, migrateExistingUsersToFirebaseAuth } from "../../services/authService";
+import {
+  recoverPassword,
+  loginUserWithFirebaseAuth,
+  migrateExistingUsersToFirebaseAuth,
+} from "../../services/authService";
 import styles from "./Login.module.css";
 
 const Login = () => {
@@ -25,7 +29,9 @@ const Login = () => {
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    return minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar;
+    return (
+      minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar
+    );
   };
 
   const handleChange = (e) => {
@@ -34,17 +40,19 @@ const Login = () => {
     if (errors[name]) setErrors((p) => ({ ...p, [name]: "" }));
   };
 
-        // Actualizar el contexto de autenticación con el usuario logueado
+  // Actualizar el contexto de autenticación con el usuario logueado
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
     if (!formData.email) newErrors.email = "El correo electrónico es requerido";
-    else if (!validateEmail(formData.email)) newErrors.email = "Por favor ingresa un correo electrónico válido";
+    else if (!validateEmail(formData.email))
+      newErrors.email = "Por favor ingresa un correo electrónico válido";
 
     if (!formData.password) newErrors.password = "La contraseña es requerida";
     else if (!validatePassword(formData.password))
-      newErrors.password = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
+      newErrors.password =
+        "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length) return;
@@ -53,7 +61,10 @@ const Login = () => {
     setSuccessMessage("");
 
     try {
-      const result = await loginUserWithFirebaseAuth(formData.email, formData.password);
+      const result = await loginUserWithFirebaseAuth(
+        formData.email,
+        formData.password
+      );
 
       if (result.success) {
         // Actualizar el contexto de autenticación con el usuario logueado
@@ -61,14 +72,14 @@ const Login = () => {
         // Guardar ID token en localStorage
         try {
           const token = await result.firebaseUser.getIdToken();
-          localStorage.setItem('authToken', token);
+          localStorage.setItem("authToken", token);
         } catch (e) {
           console.error("No se pudo guardar el ID token:", e);
         }
         setSuccessMessage(result.message);
         // Redirigir según rol: 1 admin, 2 cliente
         setTimeout(() => {
-          navigate(result.user.role === 1 ? '/admin' : '/client');
+          navigate(result.user.role === 1 ? "/admin" : "/client");
         }, 1500);
       } else {
         setErrors(result.errors);
@@ -76,7 +87,8 @@ const Login = () => {
     } catch (error) {
       console.error("Error durante el login:", error);
       setErrors({
-        general: "Error inesperado durante el inicio de sesión. Por favor intenta de nuevo."
+        general:
+          "Error inesperado durante el inicio de sesión. Por favor intenta de nuevo.",
       });
     } finally {
       setIsLoading(false);
@@ -110,11 +122,17 @@ const Login = () => {
           setRecoveryMessage("");
         }, 3000);
       } else {
-        setRecoveryMessage(result.errors.email || result.errors.general || "Error al enviar correo de recuperación");
+        setRecoveryMessage(
+          result.errors.email ||
+            result.errors.general ||
+            "Error al enviar correo de recuperación"
+        );
       }
     } catch (error) {
       console.error("Error durante la recuperación:", error);
-      setRecoveryMessage("Error inesperado durante la recuperación. Por favor intenta de nuevo.");
+      setRecoveryMessage(
+        "Error inesperado durante la recuperación. Por favor intenta de nuevo."
+      );
     } finally {
       setRecoveryLoading(false);
     }
@@ -155,75 +173,98 @@ const Login = () => {
           <p className={styles.subtitle}>
             {isRecoveryMode
               ? "Ingresa tu correo para recibir instrucciones de recuperación"
-              : "Accede a tu cuenta de CalcuLuz"
-            }
+              : "Accede a tu cuenta de CalcuLuz"}
           </p>
         </div>
 
         {!isRecoveryMode ? (
           <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>Correo Electrónico</label>
-            <input
-              type="email" id="email" name="email"
-              value={formData.email} onChange={handleChange}
-              className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
-              placeholder="tu@email.com" autoComplete="email"
-            />
-            {errors.email && <span className={styles.error}>{errors.email}</span>}
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>Contraseña</label>
-            <input
-              type="password" id="password" name="password"
-              value={formData.password} onChange={handleChange}
-              className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
-              placeholder="••••••••" autoComplete="current-password"
-            />
-            {errors.password && <span className={styles.error}>{errors.password}</span>}
-
-            <div className={styles.forgotPassword}>
-              <button
-                type="button"
-                onClick={toggleRecoveryMode}
-                className={styles.link}
-              >
-                ¿Olvidaste tu contraseña?
-              </button>
+            <div className={styles.inputGroup}>
+              <label htmlFor="email" className={styles.label}>
+                Correo Electrónico
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  errors.email ? styles.inputError : ""
+                }`}
+                placeholder="tu@email.com"
+                autoComplete="email"
+              />
+              {errors.email && (
+                <span className={styles.error}>{errors.email}</span>
+              )}
             </div>
 
-          {/* Mantengo exactamente tus clases */}
+            <div className={styles.inputGroup}>
+              <label htmlFor="password" className={styles.label}>
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  errors.password ? styles.inputError : ""
+                }`}
+                placeholder="••••••••"
+                autoComplete="current-password"
+              />
+              {errors.password && (
+                <span className={styles.error}>{errors.password}</span>
+              )}
+
+              <div className={styles.forgotPassword}>
+                <button
+                  type="button"
+                  onClick={toggleRecoveryMode}
+                  className={styles.link}
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+            </div>
+            {/* Mantengo exactamente tus clases */}
             <button
               type="submit"
               disabled={isLoading}
-              className={`${styles.submitButton} ${isLoading ? styles.loading : ""}`}
+              className={`${styles.submitButton} ${
+                isLoading ? styles.loading : ""
+              }`}
             >
               {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
             </button>
 
             {successMessage && (
-              <div className={styles.successMessage}>
-                {successMessage}
-              </div>
+              <div className={styles.successMessage}>{successMessage}</div>
             )}
 
             {errors.general && (
-              <div className={styles.errorMessage}>
-                {errors.general}
-              </div>
+              <div className={styles.errorMessage}>{errors.general}</div>
             )}
           </form>
         ) : (
           <form onSubmit={handlePasswordRecovery} className={styles.form}>
             <div className={styles.inputGroup}>
-              <label htmlFor="recoveryEmail" className={styles.label}>Correo Electrónico</label>
+              <label htmlFor="recoveryEmail" className={styles.label}>
+                Correo Electrónico
+              </label>
               <input
                 type="email"
                 id="recoveryEmail"
                 value={recoveryEmail}
                 onChange={(e) => setRecoveryEmail(e.target.value)}
-                className={`${styles.input} ${recoveryMessage && !recoveryMessage.includes('enviado') ? styles.inputError : ""}`}
+                className={`${styles.input} ${
+                  recoveryMessage && !recoveryMessage.includes("enviado")
+                    ? styles.inputError
+                    : ""
+                }`}
                 placeholder="tu@email.com"
                 autoComplete="email"
               />
@@ -232,13 +273,23 @@ const Login = () => {
             <button
               type="submit"
               disabled={recoveryLoading}
-              className={`${styles.submitButton} ${recoveryLoading ? styles.loading : ""}`}
+              className={`${styles.submitButton} ${
+                recoveryLoading ? styles.loading : ""
+              }`}
             >
-              {recoveryLoading ? "Enviando correo..." : "Enviar correo de recuperación"}
+              {recoveryLoading
+                ? "Enviando correo..."
+                : "Enviar correo de recuperación"}
             </button>
 
             {recoveryMessage && (
-              <div className={`${styles.successMessage} ${!recoveryMessage.includes('enviado') ? styles.errorMessage : ""}`}>
+              <div
+                className={`${styles.successMessage} ${
+                  !recoveryMessage.includes("enviado")
+                    ? styles.errorMessage
+                    : ""
+                }`}
+              >
                 {recoveryMessage}
               </div>
             )}
@@ -258,7 +309,9 @@ const Login = () => {
         <div className={styles.footer}>
           <p>
             ¿No tienes cuenta?{" "}
-            <a href="/signup" className={styles.link}>Regístrate aquí</a>
+            <a href="/signup" className={styles.link}>
+              Regístrate aquí
+            </a>
           </p>
         </div>
       </div>
