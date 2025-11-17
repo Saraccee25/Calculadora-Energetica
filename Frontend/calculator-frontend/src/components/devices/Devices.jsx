@@ -88,11 +88,31 @@ const Devices = () => {
   };
 
   const calculateMonthlyConsumption = (device) => {
-    const dailyConsumption = (device.device.potenciaWatts * device.dailyHours * device.quantity) / 1000;
-    const weeklyConsumption = dailyConsumption * device.weeklyDays;
-    const monthlyConsumption = (weeklyConsumption * 52) / 12;
-    return monthlyConsumption.toFixed(2);
+    const rawPower = device.device.potenciaWatts;
+    const powerW =
+      typeof rawPower === "string" ? parseFloat(rawPower) : Number(rawPower);
+
+    const hoursPerDay = Number(device.dailyHours);
+    const quantity    = Number(device.quantity);
+    const daysPerWeek = Number(device.weeklyDays);
+
+    if (
+      isNaN(powerW) ||
+      isNaN(hoursPerDay) ||
+      isNaN(quantity) ||
+      isNaN(daysPerWeek)
+    ) {
+      return "0.00";
+    }
+    const daysPerMonth = (daysPerWeek * 30) / 7;
+
+    const consumptionKwh =
+      (powerW * hoursPerDay * quantity * daysPerMonth) / 1000;
+
+    return consumptionKwh.toFixed(2);
   };
+
+
 
   return (
     <div className={styles.devicesSection}>
