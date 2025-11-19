@@ -1,26 +1,41 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 import Profile from "../profile/Profile";
-import styles from "./Header.module.css";
-
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
+
+import styles from "./Header.module.css";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
-  const { user, logout } = useAuth();
 
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  // ------------------------------------
+  // 🔥 Obtener correctamente la inicial del usuario
+  // ------------------------------------
+  const getUserInitial = (user) => {
+    if (!user) return "U";
+
+    const name =
+      user.name ||
+      user.displayName ||
+      user.fullName ||
+      user.username ||
+      user.email?.split("@")[0];
+
+    return name?.charAt(0).toUpperCase() || "U";
+  };
+
+  const userInitial = getUserInitial(user);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleUserMenu = () => setMenuOpen(!menuOpen);
-
-  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   const handleConfirmModalConfirm = () => {
     setOpenConfirmModal(false);
@@ -43,43 +58,30 @@ const Header = () => {
           <div className={styles.rightSection}>
             {/* NAV */}
             <nav className={`${styles.nav} ${isOpen ? styles.open : ""}`}>
-              <Link
-                to="/"
-                className={styles.navLink}
-                onClick={() => setIsOpen(false)}
-              >
+              <Link to="/" className={styles.navLink} onClick={() => setIsOpen(false)}>
                 Inicio
               </Link>
-              <Link
-                to="/calculadora"
-                className={styles.navLink}
-                onClick={() => setIsOpen(false)}
-              >
+
+              <Link to="/calculadora" className={styles.navLink} onClick={() => setIsOpen(false)}>
                 Calculadora
               </Link>
-              <Link
-                to="/sobre-nosotros"
-                className={styles.navLink}
-                onClick={() => setIsOpen(false)}
-              >
+
+              <Link to="/sobre-nosotros" className={styles.navLink} onClick={() => setIsOpen(false)}>
                 Sobre Nosotros
               </Link>
-              <Link
-                to="/contacto"
-                className={styles.navLink}
-                onClick={() => setIsOpen(false)}
-              >
+
+              <Link to="/contacto" className={styles.navLink} onClick={() => setIsOpen(false)}>
                 Contacto
               </Link>
 
+              {/* AUTH MOBILE */}
               <div className={styles.mobileAuthButtons}>
                 {!user ? (
                   <>
                     <Link to="/login" onClick={() => setIsOpen(false)}>
-                      <button className={styles.loginBtn}>
-                        Iniciar Sesión
-                      </button>
+                      <button className={styles.loginBtn}>Iniciar Sesión</button>
                     </Link>
+
                     <Link to="/signup" onClick={() => setIsOpen(false)}>
                       <button className={styles.signupBtn}>
                         <span>Registrarse</span>
@@ -89,6 +91,7 @@ const Header = () => {
                 ) : (
                   <div className={styles.userDropdownMobile}>
                     <div className={styles.userIconCircle}>{userInitial}</div>
+
                     <button
                       onClick={() => {
                         setIsProfileOpen(true);
@@ -97,6 +100,7 @@ const Header = () => {
                     >
                       Gestionar perfil
                     </button>
+
                     <button
                       onClick={() => setOpenConfirmModal(true)}
                       className={styles.logoutBtn}
@@ -108,6 +112,7 @@ const Header = () => {
               </div>
             </nav>
 
+            {/* AUTH DESKTOP */}
             <div className={styles.authButtons}>
               {!user ? (
                 <>
@@ -128,6 +133,7 @@ const Header = () => {
                   >
                     {userInitial}
                   </div>
+
                   {menuOpen && (
                     <div className={styles.userDropdown}>
                       <button
@@ -138,6 +144,7 @@ const Header = () => {
                       >
                         Gestionar perfil
                       </button>
+
                       <button
                         onClick={() => setOpenConfirmModal(true)}
                         className={styles.logoutBtn}
@@ -151,6 +158,7 @@ const Header = () => {
             </div>
           </div>
 
+          {/* HAMBURGER */}
           <div
             className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
             onClick={toggleMenu}
@@ -162,13 +170,18 @@ const Header = () => {
         </div>
       </header>
 
-      <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+      {/* PROFILE MODAL */}
+      <Profile
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+      />
 
+      {/* CONFIRM LOGOUT MODAL */}
       <ConfirmModal
         isOpen={openConfirmModal}
-        title="cerrar sesion"
-        message="Esta seguro de cerrar sesion?"
-        confirmText="Si"
+        title="Cerrar sesión"
+        message="¿Está seguro?"
+        confirmText="Sí"
         cancelText="No"
         onConfirm={handleConfirmModalConfirm}
         onCancel={() => setOpenConfirmModal(false)}
