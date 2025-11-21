@@ -406,3 +406,200 @@
     gap: 0.25rem;
   }
 }
+
+/* Sección de Resumen de Costos */
+.costSummary {
+  background: var(--background);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  margin: 2rem;
+  margin-top: 0;
+}
+
+.summaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.summaryHeader h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tariffBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--muted);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+}
+
+.tariffLabel {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.tariffValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.costTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+}
+
+.costTable thead {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.costTable th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--primary-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.costTable tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.costTable tbody tr:hover {
+  background: var(--muted);
+}
+
+.costTable tbody tr:last-child {
+  border-bottom: none;
+}
+
+.costTable td {
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.tableDeviceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tableDeviceName {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.tableDeviceCategory {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.centerText {
+  text-align: center;
+  font-weight: 600;
+}
+
+.rightText {
+  text-align: right;
+  font-weight: 500;
+}
+
+.costValue {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.costTable tfoot {
+  background: var(--muted);
+  border-top: 2px solid var(--border);
+}
+
+.totalRow td {
+  padding: 1.25rem 1.25rem;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+.totalAmount {
+  color: var(--primary) !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+
+/* Responsive para tabla de costos */
+@media (max-width: 768px) {
+  .costSummary {
+    padding: 1.5rem;
+    margin: 1.5rem;
+    margin-top: 0;
+  }
+
+  .summaryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .costTable {
+    font-size: 0.75rem;
+  }
+
+  .costTable th,
+  .costTable td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .tableDeviceName {
+    font-size: 0.875rem;
+  }
+
+  .tableDeviceCategory {
+    font-size: 0.625rem;
+  }
+
+  .totalRow td {
+    padding: 1rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .totalAmount {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .costTable th:nth-child(2),
+  .costTable td:nth-child(2) {
+    display: none;
+  }
+
+  .tariffBadge {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
