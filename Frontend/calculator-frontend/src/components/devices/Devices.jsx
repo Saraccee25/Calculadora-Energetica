@@ -25,47 +25,58 @@ const Devices = () => {
     dailyHours: 1,
     weeklyDays: 7,
   });
+  const [userTariff, setUserTariff] = useState(600); // Tarifa por defecto en $/kWh
 
-  
- useEffect(() => {
-  const fetchAllDevices = async () => {
-    try {
-      
-      const res = await fetch("http://localhost:8081/api/devices");
-      if (!res.ok) throw new Error("Error al obtener dispositivos del servidor");
-      const serverDevices = await res.json();
+  useEffect(() => {
+    const fetchAllDevices = async () => {
+      try {
+        const res = await fetch("http://localhost:8081/api/devices");
+        if (!res.ok) throw new Error("Error al obtener dispositivos del servidor");
+        const serverDevices = await res.json();
 
-      
-      const localDevices = preloadedDevices; 
+        const localDevices = preloadedDevices;
 
-      
-      const combined = [
-        ...localDevices.map((d) => ({
-          ...d,
-          id: `local-${d.nombre}`, 
-        })),
-        ...serverDevices,
-      ];
+        const combined = [
+          ...localDevices.map((d) => ({
+            ...d,
+            id: `local-${d.nombre}`,
+          })),
+          ...serverDevices,
+        ];
 
-     
-      const devicesWithIcons = combined.map((device) => ({
-        ...device,
-        icon: iconMap[device.categoria] || FaPlug,
-      }));
+        const devicesWithIcons = combined.map((device) => ({
+          ...device,
+          icon: iconMap[device.categoria] || FaPlug,
+        }));
 
-      setDeviceCatalog(devicesWithIcons);
-    } catch (err) {
-      console.error("Error al cargar dispositivos combinados:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setDeviceCatalog(devicesWithIcons);
+      } catch (err) {
+        console.error("Error al cargar dispositivos combinados:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchAllDevices();
-}, []);
+    fetchAllDevices();
+  }, []);
 
+  useEffect(() => {
+    // Aquí deberías obtener la tarifa del usuario activo desde tu API
+    const fetchUserTariff = async () => {
+      try {
+        // Ejemplo: const res = await fetch("http://localhost:8081/api/user/tariff");
+        // const data = await res.json();
+        // setUserTariff(data.tariff);
+        
+        // Por ahora usamos la tarifa por defecto
+        setUserTariff(600);
+      } catch (err) {
+        console.error("Error al obtener tarifa del usuario:", err);
+      }
+    };
 
-
+    fetchUserTariff();
+  }, []);
 
   const addDevice = () => {
     if (!selectedDevice) return;
@@ -93,7 +104,7 @@ const Devices = () => {
       typeof rawPower === "string" ? parseFloat(rawPower) : Number(rawPower);
 
     const hoursPerDay = Number(device.dailyHours);
-    const quantity    = Number(device.quantity);
+    const quantity = Number(device.quantity);
     const daysPerWeek = Number(device.weeklyDays);
 
     if (
@@ -102,17 +113,40 @@ const Devices = () => {
       isNaN(quantity) ||
       isNaN(daysPerWeek)
     ) {
-      return "0.00";
+      return 0;
     }
     const daysPerMonth = (daysPerWeek * 30) / 7;
 
     const consumptionKwh =
       (powerW * hoursPerDay * quantity * daysPerMonth) / 1000;
 
-    return consumptionKwh.toFixed(2);
+    return consumptionKwh;
   };
 
+  // CA1: Cálculo de costo (Consumo × Tarifa)
+  const calculateMonthlyCost = (device) => {
+    const consumption = calculateMonthlyConsumption(device);
+    return consumption * userTariff;
+  };
 
+  // CA3: Formato de pesos colombianos
+  const formatCOP = (amount) => {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
+  // Calcular totales
+  const totalConsumption = clientDevices.reduce((sum, device) => {
+    return sum + calculateMonthlyConsumption(device);
+  }, 0);
+
+  const totalCost = clientDevices.reduce((sum, device) => {
+    return sum + calculateMonthlyCost(device);
+  }, 0);
 
   return (
     <div className={styles.devicesSection}>
@@ -234,7 +268,7 @@ const Devices = () => {
                       <div className={styles.consumptionInfo}>
                         <span className={styles.consumptionLabel}>Consumo estimado mensual</span>
                         <span className={styles.consumptionValue}>
-                          {calculateMonthlyConsumption(clientDevice)} kWh
+                          {calculateMonthlyConsumption(clientDevice).toFixed(2)} kWh
                         </span>
                       </div>
                       <div className={styles.powerInfo}>
@@ -247,6 +281,61 @@ const Devices = () => {
             </div>
           )}
         </div>
+
+        {clientDevices.length > 0 && (
+        <div className={styles.costSummary}>
+          <div className={styles.summaryHeader}>
+            <h3>Resumen de Costos Mensuales</h3>
+            <div className={styles.tariffBadge}>
+              <span className={styles.tariffLabel}>Tarifa actual:</span>
+              <span className={styles.tariffValue}>{formatCOP(userTariff)}/kWh</span>
+            </div>
+          </div>
+
+          <div className={styles.tableWrapper}>
+            <table className={styles.costTable}>
+              <thead>
+                <tr>
+                  <th>Dispositivo</th>
+                  <th>Cantidad</th>
+                  <th>Consumo Mensual</th>
+                  <th>Costo Mensual</th>
+                </tr>
+              </thead>
+              <tbody>
+                {clientDevices.map((clientDevice) => (
+                  <tr key={clientDevice.id}>
+                    <td>
+                      <div className={styles.tableDeviceInfo}>
+                        <span className={styles.tableDeviceName}>{clientDevice.device.nombre}</span>
+                        <span className={styles.tableDeviceCategory}>{clientDevice.device.categoria}</span>
+                      </div>
+                    </td>
+                    <td className={styles.centerText}>{clientDevice.quantity}</td>
+                    <td className={styles.rightText}>
+                      {calculateMonthlyConsumption(clientDevice).toFixed(2)} kWh
+                    </td>
+                    <td className={styles.rightText + ' ' + styles.costValue}>
+                      {formatCOP(calculateMonthlyCost(clientDevice))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className={styles.totalRow}>
+                  <td colSpan="2"><strong>Total Estimado</strong></td>
+                  <td className={styles.rightText}>
+                    <strong>{totalConsumption.toFixed(2)} kWh</strong>
+                  </td>
+                  <td className={styles.rightText + ' ' + styles.totalAmount}>
+                    <strong>{formatCOP(totalCost)}</strong>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        )}
       </div>
     </div>
   );
