@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaPlus, FaTrash, FaTv, FaSnowflake, FaFire, FaWater, FaDesktop, FaLaptop, FaPlug } from "react-icons/fa";
 import styles from "./Devices.module.css";
 import preloadedDevices from "../../data/devices_preloaded.json";
+import apiClient from "../../api/ApiClient";
 
 const iconMap = {
   "Entretenimiento": FaTv,
@@ -26,6 +27,8 @@ const Devices = () => {
     weeklyDays: 7,
   });
   const [userTariff, setUserTariff] = useState(600); // Tarifa por defecto en $/kWh
+  const [loadingSavedDevices, setLoadingSavedDevices] = useState(true);
+  const [savingDevice, setSavingDevice] = useState(false);
 
   useEffect(() => {
     const fetchAllDevices = async () => {
@@ -78,24 +81,100 @@ const Devices = () => {
     fetchUserTariff();
   }, []);
 
-  const addDevice = () => {
-    if (!selectedDevice) return;
-    const device = deviceCatalog.find((d) => d.id === selectedDevice);
-    const newDevice = {
-      id: Date.now(),
-      deviceId: device.id,
-      device: device,
-      quantity: deviceForm.quantity,
-      dailyHours: deviceForm.dailyHours,
-      weeklyDays: deviceForm.weeklyDays,
+  // Cargar dispositivos guardados del usuario
+  useEffect(() => {
+    const loadSavedDevices = async () => {
+      if (deviceCatalog.length === 0) {
+        return; // Esperar a que se cargue el catálogo primero
+      }
+
+      try {
+        setLoadingSavedDevices(true);
+        const savedDevices = await apiClient.getAsync("/user-devices", { requireAuth: true });
+        
+        // Mapear los dispositivos guardados con los datos del catálogo
+        const mappedDevices = savedDevices.map((savedDevice) => {
+          const catalogDevice = deviceCatalog.find(
+            (d) => d.id === savedDevice.deviceId
+          );
+          
+          if (!catalogDevice) {
+            console.warn(`Dispositivo ${savedDevice.deviceId} no encontrado en el catálogo`);
+            return null;
+          }
+
+          return {
+            id: savedDevice.id, // ID del documento en Firestore
+            deviceId: savedDevice.deviceId,
+            device: catalogDevice,
+            quantity: savedDevice.quantity,
+            dailyHours: savedDevice.dailyHours,
+            weeklyDays: savedDevice.weeklyDays,
+          };
+        }).filter(d => d !== null); // Filtrar dispositivos no encontrados
+
+        setClientDevices(mappedDevices);
+      } catch (err) {
+        console.error("Error al cargar dispositivos guardados:", err);
+      } finally {
+        setLoadingSavedDevices(false);
+      }
     };
-    setClientDevices([...clientDevices, newDevice]);
-    setSelectedDevice("");
-    setDeviceForm({ quantity: 1, dailyHours: 1, weeklyDays: 7 });
+
+    loadSavedDevices();
+  }, [deviceCatalog]);
+
+  const addDevice = async () => {
+    if (!selectedDevice || savingDevice) return;
+    
+    try {
+      setSavingDevice(true);
+      const device = deviceCatalog.find((d) => d.id === selectedDevice);
+      
+      // Crear el dispositivo en el backend
+      const savedDevice = await apiClient.postAsync(
+        "/user-devices",
+        {
+          deviceId: device.id,
+          quantity: deviceForm.quantity,
+          dailyHours: deviceForm.dailyHours,
+          weeklyDays: deviceForm.weeklyDays,
+        },
+        { requireAuth: true }
+      );
+
+      // Agregar al estado local con el ID del backend
+      const newDevice = {
+        id: savedDevice.id, // ID del documento en Firestore
+        deviceId: device.id,
+        device: device,
+        quantity: deviceForm.quantity,
+        dailyHours: deviceForm.dailyHours,
+        weeklyDays: deviceForm.weeklyDays,
+      };
+      
+      setClientDevices([...clientDevices, newDevice]);
+      setSelectedDevice("");
+      setDeviceForm({ quantity: 1, dailyHours: 1, weeklyDays: 7 });
+    } catch (err) {
+      console.error("Error al guardar dispositivo:", err);
+      alert("Error al guardar el dispositivo. Por favor intenta de nuevo.");
+    } finally {
+      setSavingDevice(false);
+    }
   };
 
-  const removeDevice = (deviceId) => {
-    setClientDevices(clientDevices.filter((d) => d.id !== deviceId));
+  const removeDevice = async (deviceId) => {
+    try {
+      // Eliminar del backend
+      await apiClient.deleteAsync(`/user-devices/${deviceId}`, { requireAuth: true });
+      
+      // Eliminar del estado local
+      setClientDevices(clientDevices.filter((d) => d.id !== deviceId));
+    } catch (err) {
+      console.error("Error al eliminar dispositivo:", err);
+      alert("Error al eliminar el dispositivo. Por favor intenta de nuevo.");
+    }
   };
 
   const calculateMonthlyConsumption = (device) => {
@@ -217,14 +296,22 @@ const Devices = () => {
             </div>
           )}
 
-          <button onClick={addDevice} disabled={!selectedDevice} className={styles.addButton}>
-            <FaPlus /> Agregar Dispositivo
+          <button 
+            onClick={addDevice} 
+            disabled={!selectedDevice || savingDevice} 
+            className={styles.addButton}
+          >
+            <FaPlus /> {savingDevice ? "Guardando..." : "Agregar Dispositivo"}
           </button>
         </div>
 
         <div className={styles.devicesList}>
           <h3>Mis Dispositivos ({clientDevices.length})</h3>
-          {clientDevices.length === 0 ? (
+          {loadingSavedDevices ? (
+            <div className={styles.emptyState}>
+              <p>Cargando dispositivos guardados...</p>
+            </div>
+          ) : clientDevices.length === 0 ? (
             <div className={styles.emptyState}>
               <FaPlug className={styles.emptyIcon} />
               <p>No tienes dispositivos configurados</p>

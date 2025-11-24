@@ -56,7 +56,7 @@ export default function Tariffs() {
 
   const loadTariffs = async () => {
     try {
-      debugger;
+
       const data = await feeService.feeGetAll();
 
       const mapped = data.map((f) => {
