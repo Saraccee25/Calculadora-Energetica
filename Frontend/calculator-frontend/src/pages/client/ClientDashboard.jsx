@@ -4,7 +4,6 @@ import { useState } from "react"
 import { FaHome, FaPlug, FaChartPie, FaCalculator, FaLightbulb, FaBolt, FaLeaf, FaDollarSign } from "react-icons/fa"
 import styles from "./ClientDashboard.module.css"
 import Devices from "../../components/devices/Devices"
-import Calculations from "../../components/calculations/Calculations"
 import DataVisualization from "../../components/visualization/DataVisualization"
 import ScenarioSimulator from "../../components/simulator/ScenarioSimulator"
 import Recommendations from "../../components/recommendations/Recommendations"
@@ -15,7 +14,6 @@ const ClientDashboard = () => {
   const menuItems = [
     { id: "home", label: "Inicio", icon: FaHome },
     { id: "devices", label: "Dispositivos", icon: FaPlug },
-    { id: "calculations", label: "Cálculos", icon: FaCalculator },
     { id: "visualization", label: "Visualización", icon: FaChartPie },
     { id: "simulator", label: "Simulador", icon: FaCalculator },
     { id: "recommendations", label: "Recomendaciones", icon: FaLightbulb },
@@ -74,8 +72,6 @@ const ClientDashboard = () => {
         )
       case "devices":
         return <Devices />
-      case "calculations":
-        return <Calculations />
       case "visualization":
         return <DataVisualization />
       case "simulator":

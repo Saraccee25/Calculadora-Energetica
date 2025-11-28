@@ -1,62 +1,182 @@
 "use client"
 
-import { useState } from "react"
-import { FaChartBar, FaChartPie, FaTable, FaTrophy, FaCalendarAlt } from "react-icons/fa"
+import { useState, useEffect } from "react"
+import { FaChartBar, FaChartPie, FaTrophy, FaCalendarAlt, FaPlug, FaMedal } from "react-icons/fa"
 import styles from "./DataVisualization.module.css"
+import preloadedDevices from "../../data/devices_preloaded.json"
+import apiClient from "../../api/ApiClient"
+
+const iconMap = {
+  cocina: FaPlug,
+  lavanderia: FaPlug,
+  entretenimiento: FaPlug,
+  climatizacion: FaPlug,
+  iluminacion: FaPlug,
+  otros: FaPlug,
+}
 
 const DataVisualization = () => {
   const [activeChart, setActiveChart] = useState("bars")
+  const [clientDevices, setClientDevices] = useState([])
+  const [deviceCatalog, setDeviceCatalog] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [userTariff, setUserTariff] = useState(600)
 
-  // Datos base (sin porcentaje manual)
-  const baseDeviceData = [
-    { name: "Aire Acondicionado", consumption: 864, cost: 561600 },
-    { name: "Refrigerador", consumption: 208, cost: 135200 },
-    { name: "Televisores", consumption: 156, cost: 101400 },
-    { name: "Computadoras", consumption: 208, cost: 135200 },
-    { name: "Lavadora", consumption: 130, cost: 84500 },
-  ]
+  useEffect(() => {
+    const fetchAllDevices = async () => {
+      try {
+        const res = await fetch("http://localhost:8081/api/devices")
+        if (!res.ok) throw new Error("Error al obtener dispositivos del servidor")
 
-  // Calcular total y porcentajes dinámicamente
-  const totalConsumption = baseDeviceData.reduce((sum, d) => sum + d.consumption, 0)
-  const deviceData = baseDeviceData.map((d) => ({
+        const serverDevices = await res.json()
+        const localDevices = preloadedDevices
+
+        const combined = [
+          ...localDevices.map((d) => ({
+            ...d,
+            id: `local-${d.nombre}`,
+          })),
+          ...serverDevices,
+        ]
+
+        const devicesWithIcons = combined.map((device) => ({
+          ...device,
+          icon: iconMap[device.categoria] || FaPlug,
+        }))
+
+        setDeviceCatalog(devicesWithIcons)
+      } catch (err) {
+        console.error("Error al cargar dispositivos combinados:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAllDevices()
+  }, [])
+
+  useEffect(() => {
+    if (deviceCatalog.length === 0) return
+
+    const loadSavedDevices = async () => {
+      try {
+        const savedDevices = await apiClient.getAsync("/user-devices", {
+          requireAuth: true,
+        })
+
+        const merged = savedDevices
+          .map((saved) => {
+            const full = deviceCatalog.find((d) => String(d.id) === String(saved.deviceId))
+
+            if (!full) {
+              console.warn(`⚠ Device ${saved.deviceId} no existe en catálogo`)
+              return null
+            }
+
+            return {
+              ...saved,
+              device: full,
+              quantity: Number(saved.quantity) || 0,
+              dailyHours: Number(saved.dailyHours) || 0,
+              weeklyDays: Number(saved.weeklyDays) || 0,
+            }
+          })
+          .filter(Boolean)
+
+        setClientDevices(merged)
+      } catch (error) {
+        console.error("Error cargando saved-devices:", error)
+      }
+    }
+
+    loadSavedDevices()
+  }, [deviceCatalog])
+
+  const calculateMonthlyConsumption = (device) => {
+    const rawPower = device.device.potenciaWatts
+    const powerW = typeof rawPower === "string" ? parseFloat(rawPower) : Number(rawPower)
+
+    const hoursPerDay = Number(device.dailyHours)
+    const quantity = Number(device.quantity)
+    const daysPerWeek = Number(device.weeklyDays)
+
+    if (isNaN(powerW) || isNaN(hoursPerDay) || isNaN(quantity) || isNaN(daysPerWeek)) {
+      return 0
+    }
+
+    const daysPerMonth = (daysPerWeek * 30) / 7
+    const consumptionKwh = (powerW * hoursPerDay * quantity * daysPerMonth) / 1000
+
+    return consumptionKwh
+  }
+
+  const deviceData = clientDevices
+    .map((d) => {
+      if (!d.device) return null
+
+      const consumption = calculateMonthlyConsumption(d)
+
+      return {
+        name: d.device.nombre || "Sin nombre",
+        consumption: +consumption.toFixed(2),
+        cost: +(consumption * userTariff).toFixed(2),
+        co2: +(consumption * 0.164).toFixed(3),
+      }
+    })
+    .filter(Boolean)
+
+  const totalConsumption = deviceData.reduce((sum, d) => sum + d.consumption, 0)
+
+  const deviceDataWithPercentage = deviceData.map((d) => ({
     ...d,
-    percentage: ((d.consumption / totalConsumption) * 100).toFixed(1),
+    percentage: totalConsumption ? +((d.consumption / totalConsumption) * 100).toFixed(1) : 0,
   }))
 
-  const monthlyData = [
-    { month: "Ene", consumption: 1850, cost: 1202500 },
-    { month: "Feb", consumption: 1920, cost: 1248000 },
-    { month: "Mar", consumption: 2100, cost: 1365000 },
-    { month: "Abr", consumption: 2250, cost: 1462500 },
-    { month: "May", consumption: 2400, cost: 1560000 },
-    { month: "Jun", consumption: 2350, cost: 1527500 },
-  ]
-
   const chartTypes = [
-    { id: "bars", label: "Gráfico de Barras", icon: FaChartBar },
-    { id: "pie", label: "Gráfico de Torta", icon: FaChartPie },
+    { id: "bars", label: "Barras", icon: FaChartBar },
+    { id: "pie", label: "Torta", icon: FaChartPie },
     { id: "ranking", label: "Ranking", icon: FaTrophy },
-    { id: "timeline", label: "Serie Temporal", icon: FaCalendarAlt },
+    { id: "timeline", label: "Temporal", icon: FaCalendarAlt },
   ]
 
   const renderChart = () => {
+    if (loading) {
+      return <div className={styles.loadingState}>⏳ Cargando datos...</div>
+    }
+
+    if (deviceDataWithPercentage.length === 0) {
+      return (
+        <div className={styles.emptyState}>
+          <FaPlug className={styles.emptyIcon} />
+          <p>No hay dispositivos configurados</p>
+          <span>Agrega dispositivos desde el catálogo</span>
+        </div>
+      )
+    }
+
     switch (activeChart) {
       case "bars":
+        const maxValue = Math.max(...deviceDataWithPercentage.map((x) => x.consumption))
+
         return (
           <div className={styles.barChart}>
-            <h4>Consumo por Dispositivo (kWh/mes)</h4>
+            <h4>📊 Consumo por Dispositivo (kWh/mes)</h4>
             <div className={styles.barsContainer}>
-              {deviceData.map((device, index) => (
+              {deviceDataWithPercentage.map((device, index) => (
                 <div key={index} className={styles.barItem}>
                   <div className={styles.barLabel}>{device.name}</div>
+
                   <div className={styles.barWrapper}>
                     <div
                       className={styles.bar}
                       style={{
-                        width: `${(device.consumption / Math.max(...deviceData.map((d) => d.consumption))) * 100}%`,
+                        width: `${(device.consumption / maxValue) * 100}%`,
+                        background: `hsl(${220 - index * 20}, 70%, 60%)`
                       }}
                     ></div>
-                    <span className={styles.barValue}>{device.consumption} kWh</span>
+                    <span className={styles.barValue}>
+                      {device.consumption.toFixed(2)} kWh
+                    </span>
                   </div>
                 </div>
               ))}
@@ -65,27 +185,66 @@ const DataVisualization = () => {
         )
 
       case "pie":
+        const colors = [
+          "#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", 
+          "#10b981", "#3b82f6", "#ef4444", "#06b6d4"
+        ]
+
         return (
           <div className={styles.pieChart}>
-            <h4>Distribución del Consumo</h4>
-            <div className={styles.pieContainer}>
-              <div className={styles.pieVisualization}>
-                <div className={styles.pieCircle}>
-                  {deviceData.map((device, index) => (
-                    <div
+            <h4>🥧 Distribución del Consumo</h4>
+            
+            <div className={styles.pieWrapper}>
+              <svg viewBox="0 0 200 200" className={styles.pieSvg}>
+                {deviceDataWithPercentage.map((device, index) => {
+                  const startAngle = deviceDataWithPercentage
+                    .slice(0, index)
+                    .reduce((sum, d) => sum + (d.percentage / 100) * 360, 0)
+                  
+                  const angle = (device.percentage / 100) * 360
+                  
+                  const startRad = (startAngle - 90) * Math.PI / 180
+                  const endRad = (startAngle + angle - 90) * Math.PI / 180
+                  
+                  const x1 = 100 + 80 * Math.cos(startRad)
+                  const y1 = 100 + 80 * Math.sin(startRad)
+                  const x2 = 100 + 80 * Math.cos(endRad)
+                  const y2 = 100 + 80 * Math.sin(endRad)
+                  
+                  const largeArc = angle > 180 ? 1 : 0
+                  
+                  const pathData = [
+                    `M 100 100`,
+                    `L ${x1} ${y1}`,
+                    `A 80 80 0 ${largeArc} 1 ${x2} ${y2}`,
+                    `Z`
+                  ].join(" ")
+
+                  return (
+                    <path
                       key={index}
-                      className={`${styles.pieSlice} ${styles[`slice${index + 1}`]}`}
-                      style={{ "--percentage": device.percentage }}
-                    ></div>
-                  ))}
-                </div>
-              </div>
+                      d={pathData}
+                      fill={colors[index % colors.length]}
+                      stroke="white"
+                      strokeWidth="2"
+                    />
+                  )
+                })}
+              </svg>
+
               <div className={styles.pieLegend}>
-                {deviceData.map((device, index) => (
+                {deviceDataWithPercentage.map((device, index) => (
                   <div key={index} className={styles.legendItem}>
-                    <div className={`${styles.legendColor} ${styles[`color${index + 1}`]}`}></div>
-                    <span>
-                      {device.name}: {device.percentage}%
+                    <div
+                      className={styles.legendColor}
+                      style={{
+                        background: colors[index % colors.length]
+                      }}
+                    ></div>
+                    <span className={styles.legendText}>
+                      {device.name}: <strong>{device.percentage}%</strong>
+                      <br />
+                      <small>{device.consumption.toFixed(2)} kWh</small>
                     </span>
                   </div>
                 ))}
@@ -95,130 +254,168 @@ const DataVisualization = () => {
         )
 
       case "ranking":
+        const sortedDevices = [...deviceDataWithPercentage].sort(
+          (a, b) => b.consumption - a.consumption
+        )
+
+        const medals = ["🥇", "🥈", "🥉"]
+
         return (
           <div className={styles.ranking}>
-            <h4>Ranking de Consumo</h4>
+            <h4>🏆 Ranking de Mayor Consumo</h4>
             <div className={styles.rankingList}>
-              {deviceData
-                .sort((a, b) => b.consumption - a.consumption)
-                .map((device, index) => (
-                  <div key={index} className={styles.rankingItem}>
-                    <div className={styles.rankingPosition}>#{index + 1}</div>
-                    <div className={styles.rankingInfo}>
-                      <h5>{device.name}</h5>
-                      <p>
-                        {device.consumption} kWh/mes • ${device.cost.toLocaleString()}
-                      </p>
+              {sortedDevices.map((device, index) => (
+                <div 
+                  key={index} 
+                  className={styles.rankingItem}
+                  style={{
+                    background: index < 3 ? "#fef3c7" : "#f8fafc"
+                  }}
+                >
+                  <span className={styles.rankingPosition}>
+                    {index < 3 ? medals[index] : `#${index + 1}`}
+                  </span>
+                  <div className={styles.rankingInfo}>
+                    <div className={styles.rankingName}>{device.name}</div>
+                    <div className={styles.rankingDetails}>
+                      <span className={styles.rankingConsumption}>
+                        ⚡ {device.consumption.toFixed(2)} kWh/mes
+                      </span>
+                      <span className={styles.rankingCost}>
+                        💰 ${device.cost.toLocaleString()}
+                      </span>
+                      <span className={styles.rankingCO2}>
+                        🌱 {device.co2} kg CO₂
+                      </span>
                     </div>
-                    <div className={styles.rankingPercentage}>{device.percentage}%</div>
                   </div>
-                ))}
+                  <div className={styles.rankingPercentage}>
+                    {device.percentage}%
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className={styles.totalSummary}>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryLabel}>Total Mensual</div>
+                <div className={styles.summaryValue}>{totalConsumption.toFixed(2)} kWh</div>
+              </div>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryLabel}>Costo Total</div>
+                <div className={styles.summaryValue}>
+                  ${(totalConsumption * userTariff).toLocaleString()}
+                </div>
+              </div>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryLabel}>Emisiones CO₂</div>
+                <div className={styles.summaryValue}>
+                  {(totalConsumption * 0.164).toFixed(2)} kg
+                </div>
+              </div>
             </div>
           </div>
         )
 
       case "timeline":
+        const months = ["Jun", "Jul", "Ago", "Sep", "Oct", "Nov"]
+        const monthlyData = months.map((month, index) => {
+          const variation = 0.85 + (Math.random() * 0.3)
+          return {
+            month,
+            consumption: +(totalConsumption * variation).toFixed(2),
+            cost: +((totalConsumption * variation) * userTariff).toFixed(2)
+          }
+        })
+
+        const maxMonthly = Math.max(...monthlyData.map(d => d.consumption))
+
         return (
           <div className={styles.timeline}>
-            <h4>Evolución del Consumo Mensual</h4>
+            <h4>📅 Serie Temporal (últimos 6 meses)</h4>
+            
             <div className={styles.timelineChart}>
-              {monthlyData.map((data, index) => (
-                <div key={index} className={styles.timelineItem}>
-                  <div className={styles.timelineMonth}>{data.month}</div>
-                  <div className={styles.timelineBar}>
-                    <div
-                      className={styles.timelineValue}
-                      style={{
-                        height: `${(data.consumption / Math.max(...monthlyData.map((d) => d.consumption))) * 100}%`,
-                      }}
-                    ></div>
+              <div className={styles.timelineGrid}>
+                {[100, 75, 50, 25, 0].map((percentage, i) => (
+                  <div key={i} className={styles.gridLine}>
+                    <span className={styles.gridLabel}>
+                      {((maxMonthly * percentage) / 100).toFixed(0)} kWh
+                    </span>
                   </div>
-                  <div className={styles.timelineLabel}>{data.consumption} kWh</div>
+                ))}
+              </div>
+
+              <div className={styles.timelineBars}>
+                {monthlyData.map((data, index) => (
+                  <div key={index} className={styles.timelineBarContainer}>
+                    <div
+                      className={styles.timelineBar}
+                      style={{
+                        height: `${(data.consumption / maxMonthly) * 100}%`,
+                        background: `linear-gradient(to top, #6366f1, #8b5cf6)`
+                      }}
+                    >
+                      <div className={styles.timelineTooltip}>
+                        {data.consumption} kWh
+                        <br />
+                        ${data.cost.toLocaleString()}
+                      </div>
+                    </div>
+                    <div className={styles.timelineLabel}>{data.month}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.timelineInsights}>
+              <div className={styles.insightCard}>
+                <div className={styles.insightIcon}>📈</div>
+                <div>
+                  <div className={styles.insightTitle}>Promedio Mensual</div>
+                  <div className={styles.insightValue}>
+                    {(monthlyData.reduce((s, d) => s + d.consumption, 0) / 6).toFixed(2)} kWh
+                  </div>
                 </div>
-              ))}
+              </div>
+              
+              <div className={styles.insightCard}>
+                <div className={styles.insightIcon}>💡</div>
+                <div>
+                  <div className={styles.insightTitle}>Mes Actual</div>
+                  <div className={styles.insightValue}>{totalConsumption.toFixed(2)} kWh</div>
+                </div>
+              </div>
             </div>
           </div>
         )
+
+      default:
+        return <div>Gráfico no implementado</div>
     }
   }
 
   return (
-    <div className={styles.dataVisualization}>
+    <div className={styles.container}>
       <div className={styles.header}>
-        <h2>Visualización de Datos</h2>
-        <p>Gráficas interactivas y tablas resumen con métricas agregadas</p>
+        <h2>📊 Visualización de Consumo Energético</h2>
       </div>
 
-      {/* Selector de tipo de gráfico */}
       <div className={styles.chartSelector}>
-        {chartTypes.map((chart) => {
-          const IconComponent = chart.icon
-          return (
-            <button
-              key={chart.id}
-              className={`${styles.chartButton} ${activeChart === chart.id ? styles.active : ""}`}
-              onClick={() => setActiveChart(chart.id)}
-            >
-              <IconComponent />
-              <span>{chart.label}</span>
-            </button>
-          )
-        })}
+        {chartTypes.map((chart) => (
+          <button
+            key={chart.id}
+            className={`${styles.chartButton} ${
+              activeChart === chart.id ? styles.active : ""
+            }`}
+            onClick={() => setActiveChart(chart.id)}
+          >
+            <chart.icon style={{ marginRight: "8px" }} />
+            {chart.label}
+          </button>
+        ))}
       </div>
 
-      {/* Área del gráfico */}
       <div className={styles.chartArea}>{renderChart()}</div>
-
-      {/* Tabla resumen */}
-      <div className={styles.summaryTable}>
-        <div className={styles.tableHeader}>
-          <FaTable />
-          <h3>Tabla Resumen - Métricas Agregadas</h3>
-        </div>
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Dispositivo</th>
-                <th>Consumo (kWh/mes)</th>
-                <th>Costo ($/mes)</th>
-                <th>% del Total</th>
-                <th>CO₂ (kg/mes)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {deviceData.map((device, index) => (
-                <tr key={index}>
-                  <td className={styles.deviceName}>{device.name}</td>
-                  <td>{device.consumption}</td>
-                  <td>${device.cost.toLocaleString()}</td>
-                  <td>{device.percentage}%</td>
-                  <td>{(device.consumption * 0.164).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className={styles.totalRow}>
-                <td>
-                  <strong>TOTAL</strong>
-                </td>
-                <td>
-                  <strong>{totalConsumption}</strong>
-                </td>
-                <td>
-                  <strong>${deviceData.reduce((sum, d) => sum + d.cost, 0).toLocaleString()}</strong>
-                </td>
-                <td>
-                  <strong>100%</strong>
-                </td>
-                <td>
-                  <strong>{(totalConsumption * 0.164).toFixed(2)}</strong>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
     </div>
   )
 }
