@@ -9,6 +9,9 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import Recover from "./components/recover/recover";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
+import AboutPage from "./pages/about/AboutPage";
+import ContactPage from "./pages/contact/ContactPage";
+import CalculatorPage from "./pages/calculator/CalculatorPage";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
@@ -23,6 +26,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Register />} />
             <Route path="/recover" element={<Recover />} />
+            <Route path="/sobre-nosotros" element={<AboutPage />} />
+            <Route path="/contacto" element={<ContactPage />} />
+            <Route path="/calculadora" element={<CalculatorPage />} />
             <Route
               path="/client"
               element={
