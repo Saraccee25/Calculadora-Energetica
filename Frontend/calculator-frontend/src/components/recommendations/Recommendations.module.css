@@ -365,3 +365,222 @@
     gap: 0.5rem;
   }
 }
+
+/* =====================================================
+   🔥 NUEVO CSS COMPATIBLE 100% CON TU JSX ACTUAL
+   NO reemplaza nada. NO modifica nada. SOLO agrega.
+===================================================== */
+
+/* 📄 Sección completa del reporte */
+.reportSection {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+}
+
+.reportSection h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 📊 Grid del reporte */
+.reportGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.reportCard {
+  background: var(--color-background);
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.reportCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(21, 128, 61, 0.12);
+}
+
+.reportCard h4 {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.reportCard p {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* 🏆 Ranking PRO */
+.rankingPro {
+  margin-top: 2.5rem;
+}
+
+.rankingPro h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+
+.rankingListPro {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+}
+
+.rankingItemPro {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.8rem 0;
+}
+
+.rankingItemPro:last-child {
+  border-bottom: none;
+}
+
+.rankingLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rankNumber {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.rankingDeviceName {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.rankingValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* 🔍 Insights */
+.insightsContainer {
+  margin-top: 2.5rem;
+}
+
+.insightsContainer h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: var(--color-text-primary);
+}
+
+.insightCardPro {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 1.4rem;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.insightCardPro:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(21, 128, 61, 0.12);
+}
+
+.insightIcon {
+  min-width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.4rem;
+}
+.insightIcon svg {
+  color: #2a8e35 !important;
+  font-size: 1.6rem;
+}
+
+.insightContent h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.3rem;
+}
+
+.insightContent p {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ⬇ Botón Exportar PDF */
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--primary-foreground);
+
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  overflow: hidden;
+
+  margin-top: 2rem;
+}
+
+.exportButton:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+.exportButton svg {
+  font-size: 1.2rem;
+  color: var(--primary);  
+  background: white; 
+  padding: 6px;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .rankingItemPro {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .insightCardPro {
+    flex-direction: column;
+  }
+
+  .exportButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
