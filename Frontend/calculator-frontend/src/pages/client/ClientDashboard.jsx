@@ -1,11 +1,9 @@
-"use client"
-
 import { useState } from "react"
 import { FaHome, FaPlug, FaChartPie, FaCalculator, FaLightbulb, FaBolt, FaLeaf, FaDollarSign } from "react-icons/fa"
 import styles from "./ClientDashboard.module.css"
 import Devices from "../../components/devices/Devices"
 import DataVisualization from "../../components/visualization/DataVisualization"
-import ScenarioSimulator from "../../components/simulator/ScenarioSimulator"
+import DeviceAlternatives from "../../components/alternatives/DeviceAlternatives"
 import Recommendations from "../../components/recommendations/Recommendations"
 
 const ClientDashboard = () => {
@@ -75,7 +73,7 @@ const ClientDashboard = () => {
       case "visualization":
         return <DataVisualization />
       case "simulator":
-        return <ScenarioSimulator />
+        return <DeviceAlternatives />
       case "recommendations":
         return <Recommendations />
     }
