@@ -180,16 +180,20 @@
 }
 
 .completeButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  border: 2px solid #2a8e35;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .completeButton:hover {
-  background: rgba(21, 128, 61, 0.1);
+  background: rgba(42, 142, 53, 0.1);
 }
 
 .completedIcon {
@@ -583,4 +587,53 @@
     width: 100%;
     justify-content: center;
   }
+}
+
+.vsSection {
+  margin-top: 2rem;
+  padding: 1.2rem;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.vsGrid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.vsCard {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 40%;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+.vsArrow {
+  font-size: 2rem;
+}
+
+.vsSummary {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.vsSavings {
+  color: #0a7f2e;
+  font-size: 1.6rem;
+}
+
+.acceptedSection {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #eefbf0;
+  border-left: 4px solid #16a34a;
+}
+
+.acceptedList {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
 }
