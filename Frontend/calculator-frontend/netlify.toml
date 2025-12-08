@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "18"
+  VITE_API_BASE_URL = "https://calculadora-energetica-back.onrender.com/api"
+
+[context.production.environment]
+  VITE_API_BASE_URL = "https://calculadora-energetica-back.onrender.com/api"
+
+[context.deploy-preview.environment]
+  VITE_API_BASE_URL = "https://calculadora-energetica-back.onrender.com/api"
+

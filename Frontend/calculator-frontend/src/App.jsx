@@ -6,7 +6,7 @@ import Register from "./components/register/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import Recover from "./components/recover/recover";
+import Recover from "./components/recover/Recover";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import AboutPage from "./pages/about/AboutPage";
