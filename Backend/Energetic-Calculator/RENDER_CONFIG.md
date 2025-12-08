@@ -1,4 +1,6 @@
-# Configuración para Desplegar en Render
+# Configuración para Desplegar en Render con Docker
+
+Este proyecto incluye un Dockerfile optimizado para desplegar en Render.
 
 ## Variables de Entorno Requeridas
 
@@ -46,19 +48,15 @@ En el dashboard de Render:
 - **Region**: Elige la más cercana a tus usuarios
 - **Branch**: `main` (o la rama que uses)
 - **Root Directory**: `Backend/Energetic-Calculator`
-- **Runtime**: `Java`
+- **Runtime**: Selecciona **Docker** desde el dropdown
 
 ### 3. Build Settings
 
-- **Build Command**: 
-  ```bash
-  mvn clean package -DskipTests
-  ```
+Render detectará automáticamente el Dockerfile y lo usará. No necesitas configurar comandos de build o start.
 
-- **Start Command**: 
-  ```bash
-  java -jar target/Energetic-Calculator-0.0.1-SNAPSHOT.jar
-  ```
+Si necesitas especificarlo manualmente:
+- **Dockerfile Path**: `Dockerfile` (si está en el Root Directory)
+- El puerto se configura automáticamente desde la variable `PORT` que Render proporciona
 
 ### 4. Variables de Entorno
 
@@ -68,12 +66,21 @@ En la sección "Environment Variables", agrega TODAS las variables listadas arri
 
 ### 5. Plan
 
-- Selecciona el plan que prefieras (Free tier disponible)
+- Selecciona el plan que prefieras (Free tier disponible para empezar)
 
 ### 6. Crear Web Service
 
 - Click en "Create Web Service"
-- Render comenzará a construir y desplegar tu aplicación
+- Render comenzará a construir la imagen Docker y desplegar tu aplicación
+- El proceso de build puede tomar 5-10 minutos la primera vez
+
+### 7. Verificar el Build
+
+En los logs verás:
+1. Build de la imagen Docker (Etapa 1: compilación con Maven)
+2. Creación de la imagen runtime (Etapa 2: imagen ligera con JRE)
+3. Inicio de la aplicación Spring Boot
+4. El mensaje: `✅ Firebase inicializado correctamente con Realtime Database desde variables de entorno`
 
 ## Notas Importantes
 
@@ -101,9 +108,35 @@ Render realizará health checks automáticamente. Si tu aplicación tiene un end
 
 Una vez desplegado, puedes ver los logs en tiempo real desde el dashboard de Render para verificar que Firebase se inicializó correctamente.
 
+## Probar el Dockerfile Localmente (Opcional)
+
+Antes de desplegar, puedes probar el Dockerfile localmente:
+
+### 1. Construir la imagen:
+```bash
+cd Backend/Energetic-Calculator
+docker build -t calculadora-energetica-backend .
+```
+
+### 2. Ejecutar el contenedor:
+```bash
+docker run -p 8081:8081 \
+  -e FIREBASE_TYPE=service_account \
+  -e FIREBASE_PROJECT_ID=calculadora-electronica \
+  -e FIREBASE_PRIVATE_KEY_ID=tu-key-id \
+  -e FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n" \
+  -e FIREBASE_CLIENT_EMAIL=tu-email@proyecto.iam.gserviceaccount.com \
+  -e FIREBASE_CLIENT_ID=tu-client-id \
+  -e FIREBASE_DATABASE_URL=https://tu-proyecto-default-rtdb.firebaseio.com \
+  calculadora-energetica-backend
+```
+
+### 3. Verificar:
+La aplicación estará disponible en `http://localhost:8081`
+
 ## Verificar el Despliegue
 
-Una vez desplegado, deberías ver en los logs:
+Una vez desplegado en Render, deberías ver en los logs:
 ```
 ✅ Firebase inicializado correctamente con Realtime Database desde variables de entorno
 ```
@@ -113,4 +146,12 @@ Tu API estará disponible en: `https://tu-servicio.onrender.com`
 ## Actualizar el Frontend
 
 No olvides actualizar la URL del backend en tu frontend para apuntar a la nueva URL de Render.
+
+## Ventajas del Despliegue con Docker
+
+✅ **Entorno consistente**: La misma imagen funciona en desarrollo y producción
+✅ **Build optimizado**: Multi-stage build reduce el tamaño de la imagen final
+✅ **Caché de dependencias**: Maven descarga las dependencias una sola vez si pom.xml no cambia
+✅ **Seguridad**: La aplicación corre con un usuario no-root
+✅ **Portabilidad**: Puedes desplegar en cualquier plataforma que soporte Docker
 
