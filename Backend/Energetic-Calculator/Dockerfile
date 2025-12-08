@@ -14,11 +14,17 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Runtime
-FROM eclipse-temurin:21-jre-alpine
+# Usar Debian Slim en lugar de Alpine para compatibilidad con librerías nativas
+FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
+# Instalar dependencias necesarias para Firebase/gRPC
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # Crear un usuario no-root para ejecutar la aplicación
-RUN addgroup -S spring && adduser -S spring -G spring
+RUN groupadd -r spring && useradd -r -g spring spring
 USER spring:spring
 
 # Copiar el JAR desde la etapa de build
@@ -27,6 +33,10 @@ COPY --from=build /app/target/Energetic-Calculator-0.0.1-SNAPSHOT.jar app.jar
 # Exponer el puerto (Render usará la variable PORT)
 EXPOSE 8081
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Comando para ejecutar la aplicación con optimizaciones para contenedores
+ENTRYPOINT ["java", \
+    "-XX:+UseContainerSupport", \
+    "-XX:MaxRAMPercentage=75.0", \
+    "-Djava.security.egd=file:/dev/./urandom", \
+    "-jar", "/app/app.jar"]
 
