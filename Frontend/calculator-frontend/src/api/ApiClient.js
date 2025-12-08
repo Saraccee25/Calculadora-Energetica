@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { auth } from '../config/firebase';
 import { getAuthHeader } from '../services/getAuthHeader';
-
-// En Vite no existe `process.env` en el navegador, se usan variables `import.meta.env`
-// Puedes definir VITE_API_BASE_URL en un archivo .env, y aquí se usará.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api';
+import { API_BASE_URL } from '../config/api';
 
 class ApiClient {
   constructor() {

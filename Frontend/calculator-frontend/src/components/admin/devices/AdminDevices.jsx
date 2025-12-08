@@ -2,7 +2,8 @@
 import { useEffect, useState, useMemo } from "react"
 import Swal from "sweetalert2"
 import ui from "../AdminUI.module.css"
-import preloadedDevices from "../../../data/devices_preloaded.json" 
+import preloadedDevices from "../../../data/devices_preloaded.json"
+import { API_BASE_URL } from "../../../config/api" 
 
 export default function AdminDevices() {
   const [rows, setRows] = useState([])
@@ -24,7 +25,7 @@ export default function AdminDevices() {
   const fetchDevices = async () => {
     setLoading(true)
     try {
-      const res = await fetch("http://localhost:8081/api/devices")
+      const res = await fetch(`${API_BASE_URL}/devices`)
       const data = await res.json()
 
       if (!Array.isArray(data)) throw new Error("Respuesta inesperada del servidor")
@@ -90,7 +91,7 @@ export default function AdminDevices() {
     if (!validateForm(form)) return
 
     try {
-      const res = await fetch("http://localhost:8081/api/devices", {
+      const res = await fetch(`${API_BASE_URL}/devices`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -141,7 +142,7 @@ export default function AdminDevices() {
     if (!confirm.isConfirmed) return
 
     try {
-      const res = await fetch(`http://localhost:8081/api/devices/${id}`, { method: "DELETE" })
+      const res = await fetch(`${API_BASE_URL}/devices/${id}`, { method: "DELETE" })
       if (res.ok) {
         Swal.fire("🗑️ Eliminado", "El dispositivo fue eliminado correctamente.", "success")
         fetchDevices()
@@ -164,7 +165,7 @@ export default function AdminDevices() {
     }
 
     try {
-      const res = await fetch(`http://localhost:8081/api/devices/${editForm.id}`, {
+      const res = await fetch(`${API_BASE_URL}/devices/${editForm.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editForm),

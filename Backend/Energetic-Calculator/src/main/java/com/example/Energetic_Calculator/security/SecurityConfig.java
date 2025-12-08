@@ -20,6 +20,7 @@ public class SecurityConfig {
 
         return http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable()) // Deshabilitamos CORS de Spring Security, usamos el de WebConfig
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .addFilterBefore(firebaseAuthFilter(), UsernamePasswordAuthenticationFilter.class)

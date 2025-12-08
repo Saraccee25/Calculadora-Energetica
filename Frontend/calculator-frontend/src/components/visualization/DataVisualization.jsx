@@ -5,6 +5,7 @@ import { FaChartBar, FaChartPie, FaTrophy, FaCalendarAlt, FaPlug, FaMedal } from
 import styles from "./DataVisualization.module.css"
 import preloadedDevices from "../../data/devices_preloaded.json"
 import apiClient from "../../api/ApiClient"
+import { API_BASE_URL } from "../../config/api"
 
 const iconMap = {
   cocina: FaPlug,
@@ -25,7 +26,7 @@ const DataVisualization = () => {
   useEffect(() => {
     const fetchAllDevices = async () => {
       try {
-        const res = await fetch("http://localhost:8081/api/devices")
+        const res = await fetch(`${API_BASE_URL}/devices`)
         if (!res.ok) throw new Error("Error al obtener dispositivos del servidor")
 
         const serverDevices = await res.json()

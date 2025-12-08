@@ -17,6 +17,7 @@ import {
 import styles from "./Recommendations.module.css"
 import apiClient from "../../api/ApiClient"
 import preloadedDevices from "../../data/devices_preloaded.json"
+import { API_BASE_URL } from "../../config/api"
 
 const Recommendations = () => {
   const [filter, setFilter] = useState("all")
@@ -53,7 +54,7 @@ const Recommendations = () => {
   useEffect(() => {
     const fetchAllDevices = async () => {
       try {
-        const res = await fetch("http://localhost:8081/api/devices")
+        const res = await fetch(`${API_BASE_URL}/devices`)
         const server = await res.json()
 
         const combined = [
