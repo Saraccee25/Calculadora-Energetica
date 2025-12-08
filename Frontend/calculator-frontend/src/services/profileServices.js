@@ -1,5 +1,5 @@
 import { auth } from "../config/firebase";
-import { getUserDataApi, updateUserDataApi } from "../api/apiUser";
+import { getUserDataApi, updateUserDataApi } from "../api/ApiUser";
 
 const getProfileData = async () => {
   const user = auth.currentUser;

@@ -4,7 +4,7 @@ import {
   getFeesByStratum,
   updateFee,
   deleteFee,
-} from "../api/apiFee";
+} from "../api/Apifee";
 
 const feeCreate = async (data) => {
   return await createFee(data);
